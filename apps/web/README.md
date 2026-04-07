@@ -1,29 +1,32 @@
-# Getting Started
+# `Turborepo` Vite starter
 
-First, run the development server:
+This is a community-maintained example. If you experience a problem, please submit a pull request with a fix. GitHub Issues will be closed.
 
-```bash
-pnpm dev
-# Also works with NPM, YARN, BUN, ...
+## Using this example
+
+Run the following command:
+
+```sh
+npx create-turbo@latest -e with-vite-react
 ```
 
-Browse [localhost:3001](http://localhost:3001) to see the result.
+## What's inside?
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+This Turborepo includes the following packages and apps:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load Inter, a custom Google Font.
+### Apps and Packages
 
-## Learn More
+- `web`: react [vite](https://vitejs.dev) ts app
+- `@repo/ui`: a stub component library shared by `web` application
+- `@repo/eslint-config`: shared `eslint` configurations
+- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-Learn more about `Next.js` with the following resources:
+Each package and app is 100% [TypeScript](https://www.typescriptlang.org/).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Utilities
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+This Turborepo has some additional tools already setup for you:
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [ESLint](https://eslint.org/) for code linting
+- [Prettier](https://prettier.io) for code formatting

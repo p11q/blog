@@ -1,8 +1,30 @@
 {
-  "extends": "@repo/typescript-config/nestjs.json",
   "compilerOptions": {
-    "baseUrl": "./",
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "forceConsistentCasingInFileNames": true,
+    "incremental": true,
+    "inlineSources": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
+    "lib": ["ES2023", "ESNext.Object", "ESNext.Collection"],
+    "module": "nodenext",
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": false,
+    "noUncheckedIndexedAccess": true,
     "outDir": "./dist",
-    "strictNullChecks": true
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "removeComments": true,
+    "skipLibCheck": true,
+    "sourceMap": true,
+    "sourceRoot": "/",
+    "strict": false,
+    "target": "ES2022"
   }
 }
