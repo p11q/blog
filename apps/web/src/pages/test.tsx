@@ -1,13 +1,16 @@
 import { Button } from '@/components/ui/button';
+import { fetchWithZod } from '@/lib/fetchWithZod';
 import { useQuery } from '@tanstack/react-query';
+import z from 'zod';
 
 export const Test = () => {
   const query = useQuery({
     queryKey: ['articles'],
-    queryFn: async () => {
-      const response = await fetch('http://127.0.0.1:3000/articles');
-      return await response.json();
-    },
+    queryFn: () =>
+      fetchWithZod(z.any(), {
+        method: 'GET',
+        url: 'articles',
+      }),
   });
 
   console.log(query.data);
