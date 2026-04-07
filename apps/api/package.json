@@ -9,9 +9,9 @@
     "build": "nest build",
     "lint": "eslint .",
     "start:dev": "nest start --watch",
-    "typeorm": "pnpm run build && npx typeorm -d dist/db/data-source.js",
-    "migration:generate": "pnpm run typeorm -- migration:generate",
-    "migration:run": "pnpm run typeorm -- migration:run"
+    "migration:run": "pnpm run build && typeorm migration:run -d dist/db/data-source.js",
+    "migration:up": "pnpm run migration:run",
+    "migration:generate": "pnpm run build && typeorm migration:generate -d dist/db/data-source.js"
   },
   "devDependencies": {
     "@eslint/js": "^9",
