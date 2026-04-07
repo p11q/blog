@@ -1,5 +1,5 @@
+import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { Button } from './components/ui/button';
 
 export const Test = () => {
   const query = useQuery({
@@ -14,7 +14,7 @@ export const Test = () => {
 
   return (
     <Button size="lg" variant="destructive">
-      BUTTOBN
+      BUTTON
     </Button>
   );
 };
