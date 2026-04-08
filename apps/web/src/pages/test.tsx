@@ -16,8 +16,10 @@ export const Test = () => {
   console.log(query.data);
 
   return (
-    <Button size="lg" variant="destructive">
-      BUTTON
-    </Button>
+    <div className="flex gap-2 items-center">
+      <Button size="lg" variant="destructive">
+        BUTTON LG
+      </Button>
+    </div>
   );
 };
