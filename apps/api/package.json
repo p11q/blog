@@ -1,11 +1,12 @@
 {
-  "name": "",
+  "name": "api",
   "version": "0.0.1",
   "private": true,
   "description": "",
   "license": "UNLICENSED",
   "author": "",
   "scripts": {
+    "dev": "nest start --watch",
     "build": "nest build",
     "lint": "eslint .",
     "start:dev": "nest start --watch",
