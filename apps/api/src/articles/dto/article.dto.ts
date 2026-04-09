@@ -1,30 +1,38 @@
+import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ArticleEntity } from '~/shared/module/article.entity';
 import { UserEntity } from '~/shared/module/user.entity'; // добавьте импорт
 
 export class ArticleDto {
+  @ApiProperty()
   @IsNumber()
   id: number;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   title: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   text: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   description: string;
 
+  @ApiProperty()
   @IsString()
   @IsNotEmpty()
   tags: string;
 
+  @ApiProperty()
   @IsDate()
   createAt: Date;
 
+  @ApiProperty()
   @IsDate()
   updateAt: Date;
   author?: UserEntity;
