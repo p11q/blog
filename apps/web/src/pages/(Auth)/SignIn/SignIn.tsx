@@ -9,7 +9,7 @@ export interface SingInDto {
 }
 
 export const SignIn = () => {
-  const mutation = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (data: SingInDto) =>
       fetchWithZod(
         z.object({
@@ -25,7 +25,7 @@ export const SignIn = () => {
   });
 
   const onSubmit = (data: SingInDto) => {
-    mutation.mutate(data);
+    mutate(data);
   };
 
   return (
