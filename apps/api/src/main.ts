@@ -9,8 +9,6 @@ async function bootstrap() {
 
   const config = app.get(ConfigService);
 
-  const allowedOrigins = process.env.CORS_ORIGINS?.split(',') || [];
-
   const app_config = new DocumentBuilder()
     .setTitle('Blog')
     .setDescription("The blog's API description")
@@ -18,13 +16,12 @@ async function bootstrap() {
     .addTag('blog')
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, app_config);
-
   SwaggerModule.setup('api', app, documentFactory);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: config.getOrThrow<string>('CORS_ORIGINS'),
     methods: config.getOrThrow<string>('CORS_METHODS'),
     credentials: true,
   });
