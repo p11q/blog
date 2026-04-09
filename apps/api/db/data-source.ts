@@ -7,7 +7,7 @@ export const dataSourceOptions: DataSourceOptions = {
   username: process.env.DB_USERNAME || 'postgres',
   password: process.env.DB_PASSWORD || 'secret_pass',
   database: process.env.DB_DATABASE || 'nestjs_blog',
-  synchronize: false,
+  synchronize: true,
   entities: ['dist/**/*.entity.js'],
   migrations: ['dist/db/migrations/*.js'],
   logging: true,

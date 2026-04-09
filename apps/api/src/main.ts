@@ -5,11 +5,16 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe({ transform: true }));
-
-  app.enableCors();
 
   const config = app.get(ConfigService);
+
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  app.enableCors({
+    origin: config.getOrThrow<string>('CORS_ORIGINS'),
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true,
+  });
 
   await app.listen(
     config.getOrThrow<number>('SERVER_PORT'),
