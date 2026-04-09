@@ -12,6 +12,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import z from 'zod';
 import type { SingInDto } from './SignIn';
 
@@ -20,11 +21,13 @@ const formSchema = z.object({
   password: z.string().min(6, 'At least 6 characters'),
 });
 
-export const SignInForm = ({
-  onSubmit,
-}: {
+interface Props {
+  error: Error | null;
+  reset: () => void;
   onSubmit: (data: SingInDto) => void;
-}) => {
+}
+
+export const SignInForm = ({ error, reset, onSubmit }: Props) => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(formSchema),
@@ -42,7 +45,9 @@ export const SignInForm = ({
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign In</Button>
+          <Link to="/sign-up">
+            <Button variant="link">Sign Up</Button>
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -61,6 +66,7 @@ export const SignInForm = ({
                     type="email"
                     placeholder="m@example.com"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -81,6 +87,7 @@ export const SignInForm = ({
                     type="password"
                     placeholder="At least 6 characters"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -90,6 +97,7 @@ export const SignInForm = ({
             />
           </div>
         </form>
+        <FieldError errors={[error]} />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button type="submit" form="singin-form">
