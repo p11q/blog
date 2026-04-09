@@ -12,6 +12,7 @@ import { Field, FieldError, FieldLabel } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
+import { Link } from 'react-router-dom';
 import z from 'zod';
 import type { SignUpDto } from './SignUp';
 
@@ -27,11 +28,13 @@ const formSchema = z
     path: ['passwordRepeat'],
   });
 
-export const SignUpForm = ({
-  onSubmit,
-}: {
+interface Props {
+  error: Error | null;
+  reset: () => void;
   onSubmit: (data: SignUpDto) => void;
-}) => {
+}
+
+export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(formSchema),
@@ -51,7 +54,9 @@ export const SignUpForm = ({
           Enter your email below to create your account
         </CardDescription>
         <CardAction>
-          <Button variant="link">Sign In</Button>
+          <Link to="/sign-in">
+            <Button variant="link">Sign In</Button>
+          </Link>
         </CardAction>
       </CardHeader>
       <CardContent>
@@ -70,6 +75,7 @@ export const SignUpForm = ({
                     type="name"
                     placeholder="name"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -91,6 +97,7 @@ export const SignUpForm = ({
                     type="email"
                     placeholder="m@example.com"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -112,6 +119,7 @@ export const SignUpForm = ({
                     type="password"
                     placeholder="At least 6 characters"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -135,6 +143,7 @@ export const SignUpForm = ({
                     type="password"
                     placeholder="Confirm password"
                     autoComplete="off"
+                    onInput={reset}
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
@@ -144,6 +153,7 @@ export const SignUpForm = ({
             />
           </div>
         </form>
+        <FieldError errors={[error]} />
       </CardContent>
       <CardFooter className="flex-col gap-2">
         <Button type="submit" form="singup-form">

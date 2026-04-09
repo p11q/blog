@@ -9,7 +9,7 @@ export interface SingInDto {
 }
 
 export const SignIn = () => {
-  const { mutate } = useMutation({
+  const { mutate, error, reset } = useMutation({
     mutationFn: (data: SingInDto) =>
       fetchWithZod(
         z.object({
@@ -30,7 +30,7 @@ export const SignIn = () => {
 
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <SignInForm onSubmit={onSubmit} />
+      <SignInForm onSubmit={onSubmit} error={error} reset={reset} />
     </div>
   );
 };
