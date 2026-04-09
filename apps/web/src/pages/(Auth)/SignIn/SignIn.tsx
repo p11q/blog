@@ -1,0 +1,36 @@
+import { fetchWithZod } from '@/lib/fetchWithZod';
+import { useMutation } from '@tanstack/react-query';
+import z from 'zod';
+import { SignInForm } from './SignInForm';
+
+export interface SingInDto {
+  email: string;
+  password: string;
+}
+
+export const SignIn = () => {
+  const mutation = useMutation({
+    mutationFn: (data: SingInDto) =>
+      fetchWithZod(
+        z.object({
+          accessToken: z.jwt(),
+          refreshToken: z.jwt(),
+        }),
+        {
+          method: 'POST',
+          url: 'auth/sign-in',
+          data,
+        },
+      ),
+  });
+
+  const onSubmit = (data: SingInDto) => {
+    mutation.mutate(data);
+  };
+
+  return (
+    <div className="h-screen w-full flex items-center justify-center">
+      <SignInForm onSubmit={onSubmit} />
+    </div>
+  );
+};

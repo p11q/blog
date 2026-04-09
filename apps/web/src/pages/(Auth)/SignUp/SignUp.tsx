@@ -1,18 +1,18 @@
 import { fetchWithZod } from '@/lib/fetchWithZod';
 import { useMutation } from '@tanstack/react-query';
 import z from 'zod';
-import { AuthForm } from './AuthForm';
+import { SignUpForm } from './SignUpForm';
 
-export interface LoginDto {
+export interface SignUpDto {
   name: string;
   email: string;
   password: string;
   passwordRepeat: string;
 }
 
-export const Auth = () => {
+export const SignUp = () => {
   const mutation = useMutation({
-    mutationFn: (data: LoginDto) =>
+    mutationFn: (data: SignUpDto) =>
       fetchWithZod(
         z.object({
           accessToken: z.jwt(),
@@ -26,13 +26,13 @@ export const Auth = () => {
       ),
   });
 
-  const onSubmit = (data: LoginDto) => {
+  const onSubmit = (data: SignUpDto) => {
     mutation.mutate(data);
   };
 
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <AuthForm onSubmit={onSubmit} />
+      <SignUpForm onSubmit={onSubmit} />
     </div>
   );
 };
