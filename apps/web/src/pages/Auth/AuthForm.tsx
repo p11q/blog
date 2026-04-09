@@ -15,12 +15,17 @@ import { Controller, useForm } from 'react-hook-form';
 import z from 'zod';
 import type { LoginDto } from './Auth';
 
-const formSchema = z.object({
-  name: z.string().min(1, 'Required'),
-  email: z.email(),
-  password: z.string().min(6, 'Min 6 characters'),
-  passwordRepeat: z.string().min(6, 'Min 6 characters'),
-});
+const formSchema = z
+  .object({
+    name: z.string().min(1, 'Required'),
+    email: z.email(),
+    password: z.string().min(6, 'at least 6 characters'),
+    passwordRepeat: z.string().min(6, 'at least 6 characters'),
+  })
+  .refine((data) => data.password === data.passwordRepeat, {
+    message: "Passwords don't match",
+    path: ['passwordRepeat'],
+  });
 
 export const AuthForm = ({
   onSubmit,
@@ -28,7 +33,14 @@ export const AuthForm = ({
   onSubmit: (data: LoginDto) => void;
 }) => {
   const form = useForm({
+    mode: 'onChange',
     resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      passwordRepeat: '',
+    },
   });
 
   return (
@@ -89,6 +101,7 @@ export const AuthForm = ({
             <Controller
               name="password"
               control={form.control}
+              rules={{ deps: ['password', 'passwordRepeat'] }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
@@ -109,6 +122,7 @@ export const AuthForm = ({
             <Controller
               name="passwordRepeat"
               control={form.control}
+              rules={{ deps: ['password', 'passwordRepeat'] }}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="passwordRepeat">

@@ -13,16 +13,20 @@ export interface LoginDto {
 export const Auth = () => {
   const mutation = useMutation({
     mutationFn: (data: LoginDto) =>
-      fetchWithZod(z.any(), {
-        method: 'POST',
-        url: '/sign-up',
-        data,
-      }),
+      fetchWithZod(
+        z.object({
+          accessToken: z.jwt(),
+          refreshToken: z.jwt(),
+        }),
+        {
+          method: 'POST',
+          url: 'auth/sign-up',
+          data,
+        },
+      ),
   });
 
   const onSubmit = (data: LoginDto) => {
-    console.log(data);
-
     mutation.mutate(data);
   };
 
