@@ -1,4 +1,5 @@
 import { fetchWithZod } from '@/lib/fetchWithZod';
+import { useAuth } from '@/providers';
 import { useMutation } from '@tanstack/react-query';
 import z from 'zod';
 import { SignUpForm } from './SignUpForm';
@@ -11,6 +12,8 @@ export interface SignUpDto {
 }
 
 export const SignUp = () => {
+  const { onLogin } = useAuth();
+
   const { mutate, error, reset } = useMutation({
     mutationFn: (data: SignUpDto) =>
       fetchWithZod(
@@ -24,6 +27,8 @@ export const SignUp = () => {
           data,
         },
       ),
+
+    onSuccess: (data) => onLogin(data),
   });
 
   const onSubmit = (data: SignUpDto) => {
