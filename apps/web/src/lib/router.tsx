@@ -1,9 +1,9 @@
-import { Test } from '@/pages';
+import { Auth } from '@/pages';
 import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Test />,
+    path: '/login',
+    element: <Auth />,
   },
 ]);
