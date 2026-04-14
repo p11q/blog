@@ -14,7 +14,6 @@ import { MoreThan, Repository } from 'typeorm';
 import { RefreshTokenEntity } from '~/shared/module/refresh-token.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomBytes } from 'node:crypto';
-import { JwtStrategy } from './jwt/jwt.strategy';
 
 @Injectable()
 export class AuthService {

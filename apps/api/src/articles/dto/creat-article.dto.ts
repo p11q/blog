@@ -2,23 +2,33 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateArticleDto {
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Заголовок статьи',
+    example: 'Случай из моей жизни ...',
+  })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Основное содержание Вашей статьи',
+  })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
   text: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Краткое описание Вашей статьи',
+  })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe description обязательно для заполнения.' })
   description: string;
 
-  @ApiProperty()
+  @ApiProperty({
+    description: 'Тэги по которым будут находить Вашу статью',
+    example: '#life#style',
+  })
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe tags обязательно для заполнения.' })
   tags: string;
 }
