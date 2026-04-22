@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
+import { LikeEntity } from './likes.entity';
 
 @Entity('articles')
 export class ArticleEntity extends BaseEntity {
@@ -40,6 +41,8 @@ export class ArticleEntity extends BaseEntity {
   author: UserEntity;
 
   @OneToMany(() => CommentEntity, (item) => item.article)
-  @JoinColumn({ name: 'comments_id' })
   comments: CommentEntity[];
+
+  @OneToMany(() => LikeEntity, (item) => item.article)
+  likes: number[];
 }
