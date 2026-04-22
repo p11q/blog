@@ -12,6 +12,7 @@ import {
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
 import { LikeEntity } from './likes.entity';
+import { DislikeEntity } from './dislike.entity';
 
 @Entity('articles')
 export class ArticleEntity extends BaseEntity {
@@ -45,4 +46,7 @@ export class ArticleEntity extends BaseEntity {
 
   @OneToMany(() => LikeEntity, (item) => item.article)
   likes: number[];
+
+  @OneToMany(() => DislikeEntity, (item) => item.article)
+  dislikes: number[];
 }

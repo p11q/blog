@@ -10,10 +10,11 @@ export class LikeController {
   @Post(':id')
   @UseGuards(AuthGuard)
   like(@User('id') id_author: number, @Param('id') id_article: number) {
-    return this.likeService.togolLike(id_author, id_article);
+    return this.likeService.togglelLike(id_author, id_article);
   }
 
   @Get(':id')
+  @UseGuards(AuthGuard)
   getList(@Param('id') id_article: number) {
     return this.likeService.getList(id_article);
   }

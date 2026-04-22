@@ -5,7 +5,7 @@ import { DislikeEntity } from '~/shared/module/dislike.entity';
 import { LikeEntity } from '~/shared/module/likes.entity';
 
 @Injectable()
-export default class LikeService {
+export default class DislikeService {
   constructor(
     @InjectRepository(DislikeEntity)
     private readonly dislikeRepo: Repository<DislikeEntity>,
@@ -13,7 +13,19 @@ export default class LikeService {
     private readonly likeRepo: Repository<LikeEntity>,
   ) {}
 
-  async togglelLike(id_author: number, id_article: number) {
+  async toggleDislLike(id_author: number, id_article: number) {
+    const isExistingDislike = await this.dislikeRepo.findOne({
+      where: {
+        userId: id_author,
+        articleId: id_article,
+      },
+    });
+
+    if (isExistingDislike) {
+      await this.dislikeRepo.delete(isExistingDislike.id);
+      return 'undislike';
+    }
+
     const isExistingLike = await this.likeRepo.findOne({
       where: {
         userId: id_author,
@@ -23,29 +35,17 @@ export default class LikeService {
 
     if (isExistingLike) {
       await this.likeRepo.delete(isExistingLike.id);
-      return 'unlike';
     }
 
-    const isExistingDisike = await this.dislikeRepo.findOne({
-      where: {
-        userId: id_author,
-        articleId: id_article,
-      },
-    });
-
-    if (isExistingDisike) {
-      await this.dislikeRepo.delete(isExistingDisike.id);
-    }
-
-    const new_like = this.likeRepo.create({
+    const new_dislike = this.dislikeRepo.create({
       userId: id_author,
       articleId: id_article,
     });
-    await this.likeRepo.save(new_like);
-    return 'like';
+    await this.dislikeRepo.save(new_dislike);
+    return 'dislike';
   }
 
   async getList(id_article: number) {
-    return this.likeRepo.countBy({ articleId: id_article });
+    return this.dislikeRepo.countBy({ articleId: id_article });
   }
 }

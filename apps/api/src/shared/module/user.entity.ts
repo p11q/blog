@@ -13,6 +13,7 @@ import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
 import { IsEnum, IsNumber, IsString } from 'class-validator';
 import { LikeEntity } from './likes.entity';
+import { DislikeEntity } from './dislike.entity';
 
 export enum EUserRole {
   admin = 'admin',
@@ -54,6 +55,9 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => LikeEntity, (item) => item.author)
   likes: number[];
+
+  @OneToMany(() => DislikeEntity, (item) => item.author)
+  dislikes: number[];
 
   @OneToMany(() => RefreshTokenEntity, (item) => item.user)
   refreshTokens: RefreshTokenEntity[];
