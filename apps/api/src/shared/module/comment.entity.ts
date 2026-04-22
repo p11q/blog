@@ -11,7 +11,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { ArticleEntity } from './article.entity';
-import { LikeEntity } from './like.entity';
+import { LikeEntity } from './likes.entity';
 
 @Entity('comments')
 export class CommentEntity extends BaseEntity {

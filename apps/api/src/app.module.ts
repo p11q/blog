@@ -15,11 +15,11 @@ import { LikeModule } from './like/like.module';
     ArticalsModule,
     AuthModule,
     CommentsModule,
+    LikeModule,
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
-    LikeModule,
   ],
 })
 export class AppModule {}
