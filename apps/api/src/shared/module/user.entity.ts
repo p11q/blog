@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,7 +11,9 @@ import {
 import { ArticleEntity } from './article.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
-import { IsNumber } from 'class-validator';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { LikeEntity } from './likes.entity';
+import { DislikeEntity } from './dislike.entity';
 
 export enum EUserRole {
   admin = 'admin',
@@ -24,12 +27,15 @@ export class UserEntity extends BaseEntity {
   id: number;
 
   @Column()
+  @IsString()
   name: string;
 
   @Column()
+  @IsString()
   email: string;
 
   @Column()
+  @IsString()
   password: string;
 
   @Column({ enum: EUserRole, default: EUserRole.user })
@@ -46,6 +52,12 @@ export class UserEntity extends BaseEntity {
 
   @OneToMany(() => CommentEntity, (item) => item.author)
   comments: CommentEntity[];
+
+  @OneToMany(() => LikeEntity, (item) => item.author)
+  likes: number[];
+
+  @OneToMany(() => DislikeEntity, (item) => item.author)
+  dislikes: number[];
 
   @OneToMany(() => RefreshTokenEntity, (item) => item.user)
   refreshTokens: RefreshTokenEntity[];
