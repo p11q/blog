@@ -31,6 +31,9 @@ export class ArticleEntity extends BaseEntity {
   @Column({ nullable: true })
   tags: string;
 
+  @Column({ nullable: true })
+  file: string;
+
   @CreateDateColumn({ name: 'create_at' })
   createAt: Date;
 
