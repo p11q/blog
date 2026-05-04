@@ -3,6 +3,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -10,6 +11,9 @@ import {
 import { ArticleEntity } from './article.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
+import { IsEnum, IsNumber, IsString } from 'class-validator';
+import { LikeEntity } from './likes.entity';
+import { DislikeEntity } from './dislike.entity';
 import { IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -33,6 +37,7 @@ export class UserEntity extends BaseEntity {
     type: () => String,
   })
   @Column()
+  @IsString()
   name: string;
 
   @ApiProperty({
@@ -40,6 +45,7 @@ export class UserEntity extends BaseEntity {
     type: () => String,
   })
   @Column()
+  @IsString()
   email: string;
 
   @ApiProperty({
@@ -47,6 +53,7 @@ export class UserEntity extends BaseEntity {
     type: () => String,
   })
   @Column()
+  @IsString()
   password: string;
 
   @ApiProperty({
@@ -84,6 +91,12 @@ export class UserEntity extends BaseEntity {
   })
   @OneToMany(() => CommentEntity, (item) => item.author)
   comments: CommentEntity[];
+
+  @OneToMany(() => LikeEntity, (item) => item.author)
+  likes: number[];
+
+  @OneToMany(() => DislikeEntity, (item) => item.author)
+  dislikes: number[];
 
   @ApiProperty({ type: () => RefreshTokenEntity })
   @OneToMany(() => RefreshTokenEntity, (item) => item.user)

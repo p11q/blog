@@ -11,6 +11,8 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
+import { LikeEntity } from './likes.entity';
+import { DislikeEntity } from './dislike.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('articles')
@@ -79,6 +81,11 @@ export class ArticleEntity extends BaseEntity {
     type: () => CommentEntity,
   })
   @OneToMany(() => CommentEntity, (item) => item.article)
-  @JoinColumn({ name: 'comments_id' })
   comments: CommentEntity[];
+
+  @OneToMany(() => LikeEntity, (item) => item.article)
+  likes: number[];
+
+  @OneToMany(() => DislikeEntity, (item) => item.article)
+  dislikes: number[];
 }
