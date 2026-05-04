@@ -5,27 +5,21 @@ import { CommentEntity } from '~/shared/module/comment.entity';
 import { UserEntity } from '~/shared/module/user.entity'; // добавьте импорт
 
 export class CommentDto {
-  @ApiProperty()
   @IsNumber()
   id: number;
 
-  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
   text: string;
 
-  @ApiProperty()
   @IsDate()
   createAt: Date;
 
-  @ApiProperty()
   @IsDate()
   updateAt: Date;
 
-  @ApiProperty()
   author?: UserEntity;
 
-  @ApiProperty()
   article?: ArticleEntity;
 
   constructor(ent: CommentEntity) {

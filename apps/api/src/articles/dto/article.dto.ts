@@ -1,38 +1,30 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ArticleEntity } from '~/shared/module/article.entity';
 import { UserEntity } from '~/shared/module/user.entity'; // добавьте импорт
 
 export class ArticleDto {
-  @ApiProperty()
   @IsNumber()
   id: number;
 
-  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
   title: string;
 
-  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
   text: string;
 
-  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe description обязательно для заполнения.' })
   description: string;
 
-  @ApiProperty()
   @IsString()
-  @IsNotEmpty()
+  @IsNotEmpty({ message: 'Полe tags обязательно для заполнения.' })
   tags: string;
 
-  @ApiProperty()
   @IsDate()
   createAt: Date;
 
-  @ApiProperty()
   @IsDate()
   updateAt: Date;
   author?: UserEntity;
