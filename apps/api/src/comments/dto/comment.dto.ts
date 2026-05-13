@@ -23,10 +23,10 @@ export class CommentDto {
   updateAt: Date;
 
   @ApiProperty()
-  author?: UserEntity;
+  author: number;
 
   @ApiProperty()
-  article?: ArticleEntity;
+  article: number;
 
   constructor(ent: CommentEntity) {
     this.id = ent.id;

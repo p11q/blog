@@ -8,6 +8,7 @@ import { CommentsModule } from './comments/comments.module';
 import { ConfigModule } from '@nestjs/config';
 import { LikeModule } from './like/like.module';
 import { DislikeModule } from './dislike/dislike.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DislikeModule } from './dislike/dislike.module';
       isGlobal: true,
       envFilePath: '.env',
     }),
+    UploadModule,
   ],
 })
 export class AppModule {}

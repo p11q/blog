@@ -5,20 +5,21 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
-  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
 import { ArticleEntity } from './article.entity';
 
-@Entity('comment')
-export class CommentEntity extends BaseEntity {
+@Entity('upload')
+export class UploadEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column()
-  text: string;
+  path: string;
+
+  @Column({ name: 'article_id' })
+  articleId: number;
 
   @CreateDateColumn({ name: 'create_at' })
   createAt: Date;
@@ -26,11 +27,7 @@ export class CommentEntity extends BaseEntity {
   @UpdateDateColumn({ name: 'update_at' })
   updateAt: Date;
 
-  @ManyToOne(() => ArticleEntity, (item) => item.comments)
+  @ManyToOne(() => ArticleEntity, (item) => item.files)
   @JoinColumn({ name: 'article_id' })
   article: number;
-
-  @ManyToOne(() => UserEntity, (item) => item.comments)
-  @JoinColumn({ name: 'user_id' })
-  author: number;
 }

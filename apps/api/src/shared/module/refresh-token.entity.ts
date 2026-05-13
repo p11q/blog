@@ -17,6 +17,6 @@ export class RefreshTokenEntity extends BaseEntity {
   expires: Date;
 
   @ManyToOne(() => UserEntity, (user) => user.refreshTokens)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user' })
   user: UserEntity;
 }

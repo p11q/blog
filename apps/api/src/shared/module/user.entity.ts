@@ -11,8 +11,8 @@ import {
 import { ArticleEntity } from './article.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { LikeEntity } from './likes.entity';
+import { IsNumber, IsString } from 'class-validator';
+import { LikeEntity } from './like.entity';
 import { DislikeEntity } from './dislike.entity';
 
 export enum EUserRole {
@@ -20,7 +20,7 @@ export enum EUserRole {
   user = 'user',
 }
 
-@Entity('users')
+@Entity('user')
 export class UserEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   @IsNumber()
@@ -48,15 +48,19 @@ export class UserEntity extends BaseEntity {
   updateAt: Date;
 
   @OneToMany(() => ArticleEntity, (item) => item.author)
-  articles: ArticleEntity[];
+  @JoinColumn({ name: 'article_id' })
+  articles: number[];
 
   @OneToMany(() => CommentEntity, (item) => item.author)
-  comments: CommentEntity[];
+  @JoinColumn({ name: 'comment_id' })
+  comments: number[];
 
   @OneToMany(() => LikeEntity, (item) => item.author)
+  @JoinColumn({ name: 'like_id' })
   likes: number[];
 
   @OneToMany(() => DislikeEntity, (item) => item.author)
+  @JoinColumn({ name: 'dislike_id' })
   dislikes: number[];
 
   @OneToMany(() => RefreshTokenEntity, (item) => item.user)

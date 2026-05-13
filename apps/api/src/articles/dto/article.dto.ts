@@ -35,7 +35,7 @@ export class ArticleDto {
   @ApiProperty()
   @IsDate()
   updateAt: Date;
-  author?: UserEntity;
+  author?: number;
 
   constructor(ent: ArticleEntity) {
     this.id = ent.id;

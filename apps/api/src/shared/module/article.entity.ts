@@ -11,8 +11,9 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
-import { LikeEntity } from './likes.entity';
+import { LikeEntity } from './like.entity';
 import { DislikeEntity } from './dislike.entity';
+import { UploadEntity } from './upload.entity';
 
 @Entity('articles')
 export class ArticleEntity extends BaseEntity {
@@ -31,9 +32,6 @@ export class ArticleEntity extends BaseEntity {
   @Column({ nullable: true })
   tags: string;
 
-  @Column({ nullable: true })
-  file: string;
-
   @CreateDateColumn({ name: 'create_at' })
   createAt: Date;
 
@@ -42,14 +40,21 @@ export class ArticleEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (item) => item.articles)
   @JoinColumn({ name: 'user_id' })
-  author: UserEntity;
+  author: number;
 
   @OneToMany(() => CommentEntity, (item) => item.article)
-  comments: CommentEntity[];
+  @JoinColumn({ name: 'comment_id' })
+  comments: number[];
 
   @OneToMany(() => LikeEntity, (item) => item.article)
+  @JoinColumn({ name: 'like_id' })
   likes: number[];
 
   @OneToMany(() => DislikeEntity, (item) => item.article)
+  @JoinColumn({ name: 'dislike_id' })
   dislikes: number[];
+
+  @OneToMany(() => UploadEntity, (item) => item.article)
+  @JoinColumn({ name: 'file_id' })
+  files: number[];
 }
