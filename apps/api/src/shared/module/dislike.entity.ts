@@ -1,15 +1,15 @@
 import {
-  Entity,
   BaseEntity,
-  JoinColumn,
-  PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinColumn,
   ManyToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
 import { ArticleEntity } from './article.entity';
+import { UserEntity } from './user.entity';
 
 @Entity('dislike')
 export class DislikeEntity extends BaseEntity {

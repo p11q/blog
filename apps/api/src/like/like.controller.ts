@@ -1,7 +1,7 @@
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import LikeService from './like.service';
-import { User } from '~/libs/common/decorators/user.decorator';
 import { AuthGuard } from '~/guards/auth.guard';
+import { User } from '~/libs/common/decorators/user.decorator';
+import LikeService from './like.service';
 
 @Controller('like')
 export class LikeController {

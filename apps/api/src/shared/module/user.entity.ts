@@ -1,3 +1,5 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { IsNumber, IsString } from 'class-validator';
 import {
   BaseEntity,
   Column,
@@ -9,13 +11,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleEntity } from './article.entity';
-import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
-import { IsNumber, IsString } from 'class-validator';
-import { LikeEntity } from './like.entity';
 import { DislikeEntity } from './dislike.entity';
-import { IsNumber } from 'class-validator';
-import { ApiProperty } from '@nestjs/swagger';
+import { LikeEntity } from './like.entity';
+import { RefreshTokenEntity } from './refresh-token.entity';
 
 export enum EUserRole {
   admin = 'admin',

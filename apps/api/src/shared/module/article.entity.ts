@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseEntity,
   Column,
@@ -9,12 +10,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserEntity } from './user.entity';
 import { CommentEntity } from './comment.entity';
-import { LikeEntity } from './like.entity';
 import { DislikeEntity } from './dislike.entity';
+import { LikeEntity } from './like.entity';
 import { UploadEntity } from './upload.entity';
-import { ApiProperty } from '@nestjs/swagger';
+import { UserEntity } from './user.entity';
 
 @Entity('articles')
 export class ArticleEntity extends BaseEntity {

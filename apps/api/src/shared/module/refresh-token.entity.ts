@@ -1,3 +1,4 @@
+import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseEntity,
   Column,
@@ -7,7 +8,6 @@ import {
   PrimaryColumn,
 } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity('refresh_token')
 export class RefreshTokenEntity extends BaseEntity {
