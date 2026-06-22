@@ -19,7 +19,7 @@ export const SignUp = () => {
       fetchWithZod(
         z.object({
           accessToken: z.jwt(),
-          refreshToken: z.jwt(),
+          refreshToken: z.string(),
         }),
         {
           method: 'POST',

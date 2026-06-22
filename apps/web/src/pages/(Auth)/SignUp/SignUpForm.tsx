@@ -38,12 +38,6 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: '',
-      email: '',
-      password: '',
-      passwordRepeat: '',
-    },
   });
 
   return (

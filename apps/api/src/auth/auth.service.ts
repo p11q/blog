@@ -3,17 +3,17 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { UsersService } from '~/users/users.service';
-import { SignInDto } from './dto/sign-in.dto';
-import { SignInResponceDto } from './dto/sign-in-resp.dto';
-import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { SignUpDto } from './dto/sign-up.dto';
-import { UserEntity } from '~/shared/module/user.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'node:crypto';
 import { MoreThan, Repository } from 'typeorm';
 import { RefreshTokenEntity } from '~/shared/module/refresh-token.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { randomBytes } from 'node:crypto';
+import { UserEntity } from '~/shared/module/user.entity';
+import { UsersService } from '~/users/users.service';
+import { SignInResponceDto } from './dto/sign-in-resp.dto';
+import { SignInDto } from './dto/sign-in.dto';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
@@ -41,6 +41,9 @@ export class AuthService {
 
   async signUp(data: SignUpDto): Promise<SignInResponceDto> {
     const user = await this.userService.getUserByEmail(data.email);
+
+    console.log('@@@@@@@@@@@@@@@', data);
+
     if (user) {
       throw new BadRequestException('User already exists');
     }
