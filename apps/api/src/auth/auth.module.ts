@@ -10,23 +10,23 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from '~/users/users.module';
 
 @Module({
+  controllers: [AuthController],
+  exports: [AuthService, JwtModule],
   imports: [
     TypeOrmModule.forFeature([UserEntity, RefreshTokenEntity]),
     forwardRef(() => UsersModule),
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
         global: true,
         secret: configService.getOrThrow<string>('JWT_SECRET'),
         signOptions: {
           expiresIn: configService.getOrThrow<number>('Expires_JWT_Token'),
         },
       }),
-      inject: [ConfigService],
     }),
   ],
-  exports: [AuthService, JwtModule],
   providers: [AuthService, JwtStrategy],
-  controllers: [AuthController],
 })
 export class AuthModule {}

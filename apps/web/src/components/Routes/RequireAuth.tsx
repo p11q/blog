@@ -1,7 +1,11 @@
 import { useAuth } from '@/providers/Auth';
 import { Navigate } from 'react-router-dom';
 
-export const RequireAuth = ({ children }: { children: React.ReactNode }) => {
+export const RequireAuth = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.ReactNode => {
   const { tokens } = useAuth();
 
   if (!tokens) {

@@ -7,15 +7,18 @@ import LikeService from './like.service';
 export class LikeController {
   constructor(private readonly likeService: LikeService) {}
 
-  @Post(':id')
-  @UseGuards(AuthGuard)
-  like(@User('id') id_author: number, @Param('id') id_article: number) {
-    return this.likeService.togglelLike(id_author, id_article);
-  }
-
   @Get(':id')
   @UseGuards(AuthGuard)
-  getList(@Param('id') id_article: number) {
+  getList(@Param('id') id_article: number): Promise<number> {
     return this.likeService.getList(id_article);
+  }
+
+  @Post(':id')
+  @UseGuards(AuthGuard)
+  like(
+    @User('id') id_author: number,
+    @Param('id') id_article: number,
+  ): Promise<string> {
+    return this.likeService.togglelLike(id_author, id_article);
   }
 }

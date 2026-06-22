@@ -1,11 +1,13 @@
-import { MigrationInterface, QueryRunner } from "typeorm";
+import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class InitialSchema1776160025180 implements MigrationInterface {
+  public down(_queryRunner: QueryRunner): Promise<void> {
+    // no-op: схема создаётся в более поздней миграции
+    return Promise.resolve();
+  }
 
-    public async up(queryRunner: QueryRunner): Promise<void> {
-    }
-
-    public async down(queryRunner: QueryRunner): Promise<void> {
-    }
-
+  public up(_queryRunner: QueryRunner): Promise<void> {
+    // no-op: схема создаётся в более поздней миграции
+    return Promise.resolve();
+  }
 }

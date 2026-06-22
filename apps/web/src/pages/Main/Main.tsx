@@ -1,7 +1,7 @@
 import { queryFactory } from '@/pages/Profile/api';
 import { useQuery } from '@tanstack/react-query';
 
-export const Main = () => {
+export const Main = (): React.JSX.Element => {
   const { data: profile } = useQuery(queryFactory.profileOptions());
 
   return (

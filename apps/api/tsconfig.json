@@ -25,6 +25,7 @@
     "sourceMap": true,
     "sourceRoot": "/",
     "strict": false,
+    "strictNullChecks": true,
     "target": "ES2022",
     "types": ["Multer"]
   }

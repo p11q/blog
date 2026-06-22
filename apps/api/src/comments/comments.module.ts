@@ -8,11 +8,11 @@ import { AuthModule } from '~/auth/auth.module';
 import { CommentEntity } from '~/shared/module/comment.entity';
 
 @Module({
+  controllers: [CommentsController],
   imports: [
     TypeOrmModule.forFeature([ArticleEntity, UserEntity, CommentEntity]),
     AuthModule,
   ],
-  controllers: [CommentsController],
   providers: [CommentsService],
 })
 export class CommentsModule {}

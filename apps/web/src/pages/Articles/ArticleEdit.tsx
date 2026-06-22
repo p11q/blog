@@ -12,7 +12,7 @@ import { apiUpdateArticle } from './api/apiUpdateArticle';
 import { articlesQueryFactory } from './api/queryFactory';
 import { ArticleForm, type ArticleFormValues } from './components/ArticleForm';
 
-export const ArticleEdit = () => {
+export const ArticleEdit = (): React.JSX.Element => {
   const { id } = useParams();
   const articleId = Number(id);
   const navigate = useNavigate();
@@ -23,13 +23,13 @@ export const ArticleEdit = () => {
   );
   const { data: profile } = useQuery(profileQueryFactory.profileOptions());
 
-  const { mutate, isPending, error } = useMutation({
+  const { error, isPending, mutate } = useMutation({
     mutationFn: (values: ArticleFormValues) =>
       apiUpdateArticle(articleId, values),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['articles', articleId] });
-      queryClient.invalidateQueries({ queryKey: ['articles'] });
-      navigate(`/articles/${articleId}`);
+      void queryClient.invalidateQueries({ queryKey: ['articles', articleId] });
+      void queryClient.invalidateQueries({ queryKey: ['articles'] });
+      void navigate(`/articles/${articleId}`);
     },
   });
 
@@ -49,15 +49,15 @@ export const ArticleEdit = () => {
       </CardHeader>
       <CardContent>
         <ArticleForm
-          submitLabel="Сохранить"
-          isPending={isPending}
-          error={error}
           defaultValues={{
-            title: article.title,
             description: article.description ?? '',
-            text: article.text,
             tags: article.tags ?? '',
+            text: article.text,
+            title: article.title,
           }}
+          error={error}
+          isPending={isPending}
+          submitLabel="Сохранить"
           onSubmit={mutate}
         />
       </CardContent>

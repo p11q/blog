@@ -13,23 +13,28 @@ export default class DislikeService {
     private readonly likeRepo: Repository<LikeEntity>,
   ) {}
 
-  async toggleDislLike(id_author: number, id_article: number) {
+  async getList(id_article: number): Promise<number> {
+    return this.dislikeRepo.countBy({ articleId: id_article });
+  }
+
+  async toggleDislLike(id_author: number, id_article: number): Promise<string> {
     const isExistingDislike = await this.dislikeRepo.findOne({
       where: {
-        userId: id_author,
         articleId: id_article,
+        userId: id_author,
       },
     });
 
     if (isExistingDislike) {
       await this.dislikeRepo.delete(isExistingDislike.id);
+
       return 'undislike';
     }
 
     const isExistingLike = await this.likeRepo.findOne({
       where: {
-        userId: id_author,
         articleId: id_article,
+        userId: id_author,
       },
     });
 
@@ -38,14 +43,11 @@ export default class DislikeService {
     }
 
     const new_dislike = this.dislikeRepo.create({
-      userId: id_author,
       articleId: id_article,
+      userId: id_author,
     });
     await this.dislikeRepo.save(new_dislike);
-    return 'dislike';
-  }
 
-  async getList(id_article: number) {
-    return this.dislikeRepo.countBy({ articleId: id_article });
+    return 'dislike';
   }
 }

@@ -9,7 +9,10 @@ interface Props {
   canUpload: boolean;
 }
 
-export const ArticleImages = ({ articleId, canUpload }: Props) => {
+export const ArticleImages = ({
+  articleId,
+  canUpload,
+}: Props): null | React.JSX.Element => {
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
 
@@ -20,13 +23,15 @@ export const ArticleImages = ({ articleId, canUpload }: Props) => {
   const uploadMutation = useMutation({
     mutationFn: (file: File) => apiUploadImage(articleId, file),
     onSuccess: () => {
-      queryClient.invalidateQueries({
+      void queryClient.invalidateQueries({
         queryKey: ['articles', articleId, 'images'],
       });
     },
   });
 
-  const handleSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleSelectFile = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ): void => {
     const file = event.target.files?.[0];
 
     if (file) {
@@ -49,19 +54,21 @@ export const ArticleImages = ({ articleId, canUpload }: Props) => {
         {canUpload && (
           <>
             <input
+              className="hidden"
+              accept="image/*"
               ref={inputRef}
               type="file"
-              accept="image/*"
-              className="hidden"
               onChange={handleSelectFile}
             />
             <Button
-              variant="outline"
-              size="sm"
               disabled={uploadMutation.isPending}
+              size="sm"
+              variant="outline"
               onClick={() => inputRef.current?.click()}
             >
-              {uploadMutation.isPending ? 'Загрузка...' : 'Добавить изображение'}
+              {uploadMutation.isPending
+                ? 'Загрузка...'
+                : 'Добавить изображение'}
             </Button>
           </>
         )}
@@ -78,10 +85,10 @@ export const ArticleImages = ({ articleId, canUpload }: Props) => {
           {images.map((image) => (
             <img
               key={image.id}
-              src={image.url}
-              alt="Изображение статьи"
               className="h-40 w-full rounded-lg object-cover ring-1 ring-foreground/10"
+              alt="Изображение статьи"
               loading="lazy"
+              src={image.url}
             />
           ))}
         </div>

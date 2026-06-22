@@ -23,18 +23,18 @@ const formSchema = z.object({
 
 interface Props {
   error: Error | null;
-  reset: () => void;
   onSubmit: (data: SingInDto) => void;
+  reset: () => void;
 }
 
-export const SignInForm = ({ error, reset, onSubmit }: Props) => {
+export const SignInForm = ({
+  error,
+  onSubmit,
+  reset,
+}: Props): React.JSX.Element => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
   });
 
   return (
@@ -45,27 +45,27 @@ export const SignInForm = ({ error, reset, onSubmit }: Props) => {
           Enter your email below to login to your account
         </CardDescription>
         <CardAction>
-          <Link to="/sign-up">
-            <Button variant="link">Sign Up</Button>
-          </Link>
+          <Button variant="link" asChild>
+            <Link to="/sign-up">Sign Up</Link>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
         <form id="singin-form" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6">
             <Controller
-              name="email"
               control={form.control}
+              name="email"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="email">Email</FieldLabel>
                   <Input
                     {...field}
-                    id="email"
                     aria-invalid={fieldState.invalid}
-                    type="email"
-                    placeholder="m@example.com"
                     autoComplete="off"
+                    id="email"
+                    placeholder="m@example.com"
+                    type="email"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -75,18 +75,18 @@ export const SignInForm = ({ error, reset, onSubmit }: Props) => {
               )}
             />
             <Controller
-              name="password"
               control={form.control}
+              name="password"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <Input
                     {...field}
-                    id="password"
                     aria-invalid={fieldState.invalid}
-                    type="password"
-                    placeholder="At least 6 characters"
                     autoComplete="off"
+                    id="password"
+                    placeholder="At least 6 characters"
+                    type="password"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -100,7 +100,7 @@ export const SignInForm = ({ error, reset, onSubmit }: Props) => {
         <FieldError errors={error ? [error] : []} />
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" form="singin-form">
+        <Button form="singin-form" type="submit">
           Sign in
         </Button>
       </CardFooter>

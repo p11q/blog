@@ -1,4 +1,8 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateArticleDto } from './dto/creat-article.dto';
 import { ArticleDto } from './dto/article.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -14,7 +18,10 @@ export class ArticlesService {
     private readonly articRepo: Repository<ArticleEntity>,
   ) {}
 
-  async create(author: UserEntity, data: CreateArticleDto) {
+  async create(
+    author: UserEntity,
+    data: CreateArticleDto,
+  ): Promise<ArticleDto> {
     const articale = new ArticleEntity();
     articale.title = data.title;
     articale.text = data.text;
@@ -27,61 +34,71 @@ export class ArticlesService {
     return new ArticleDto(res);
   }
 
-  async getList() {
-    const articles = await this.articRepo.find();
-
-    return articles.map((item) => new ArticleDto(item));
-  }
-
-  async getById(id: number) {
-    const article = await this.articRepo
+  async deleteById(id_author: number, id_article: number): Promise<void> {
+    const articale = await this.articRepo
       .findOne({
-        where: { id },
         relations: ['author'],
+        where: {
+          author: id_author,
+          id: id_article,
+        },
       })
       .catch(() => {
         throw new InternalServerErrorException();
       });
 
+    if (!articale) {
+      throw new NotFoundException();
+    }
+
+    await this.articRepo.delete(articale.id);
+  }
+
+  async getById(id: number): Promise<ArticleDto> {
+    const article = await this.articRepo
+      .findOne({
+        relations: ['author'],
+        where: { id },
+      })
+      .catch(() => {
+        throw new InternalServerErrorException();
+      });
+
+    if (!article) {
+      throw new NotFoundException();
+    }
+
     return new ArticleDto(article);
+  }
+
+  async getList(): Promise<ArticleDto[]> {
+    const articles = await this.articRepo.find();
+
+    return articles.map((item) => new ArticleDto(item));
   }
 
   async updateById(
     id_author: number,
     id_article: number,
     data: UpdateArticleDto,
-  ) {
+  ): Promise<ArticleDto> {
     await this.articRepo
       .update(
         {
-          id: id_article,
           author: id_author,
+          id: id_article,
         },
         {
-          title: data.title,
-          text: data.text,
           description: data.description,
           tags: data.tags,
+          text: data.text,
+          title: data.title,
         },
       )
       .catch(() => {
         throw new InternalServerErrorException();
       });
-    return await this.getById(id_article);
-  }
 
-  async deleteById(id_author: number, id_article: number) {
-    const articale = await this.articRepo
-      .findOne({
-        where: {
-          id: id_article,
-          author: id_author,
-        },
-        relations: ['author'],
-      })
-      .catch(() => {
-        throw new InternalServerErrorException();
-      });
-    await this.articRepo.delete(articale.id);
+    return await this.getById(id_article);
   }
 }

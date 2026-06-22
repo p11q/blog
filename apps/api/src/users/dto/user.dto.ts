@@ -1,19 +1,18 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { UserEntity } from '~/shared/module/user.entity';
 
 export class UserDto {
+  @IsString()
+  @IsEmail()
+  @IsNotEmpty()
+  email: string;
+
   @IsNumber()
   id: number;
 
   @IsString()
   @IsNotEmpty()
   name: string;
-
-  @IsString()
-  @IsEmail()
-  @IsNotEmpty()
-  email: string;
 
   @IsString()
   @IsNotEmpty()

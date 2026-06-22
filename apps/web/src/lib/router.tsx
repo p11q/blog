@@ -14,52 +14,52 @@ import { createBrowserRouter } from 'react-router-dom';
 
 export const router = createBrowserRouter([
   {
-    path: '/sign-up',
     element: (
       <RequireNotAuth>
         <SignUp />
       </RequireNotAuth>
     ),
+    path: '/sign-up',
   },
   {
-    path: '/sign-in',
     element: (
       <RequireNotAuth>
         <SignIn />
       </RequireNotAuth>
     ),
+    path: '/sign-in',
   },
   {
+    children: [
+      {
+        element: <Main />,
+        path: '/',
+      },
+      {
+        element: <ArticlesList />,
+        path: '/articles',
+      },
+      {
+        element: <ArticleCreate />,
+        path: '/articles/create',
+      },
+      {
+        element: <ArticleDetail />,
+        path: '/articles/:id',
+      },
+      {
+        element: <ArticleEdit />,
+        path: '/articles/:id/edit',
+      },
+      {
+        element: <Profile />,
+        path: '/profile',
+      },
+    ],
     element: (
       <RequireAuth>
         <Layout />
       </RequireAuth>
     ),
-    children: [
-      {
-        path: '/',
-        element: <Main />,
-      },
-      {
-        path: '/articles',
-        element: <ArticlesList />,
-      },
-      {
-        path: '/articles/create',
-        element: <ArticleCreate />,
-      },
-      {
-        path: '/articles/:id',
-        element: <ArticleDetail />,
-      },
-      {
-        path: '/articles/:id/edit',
-        element: <ArticleEdit />,
-      },
-      {
-        path: '/profile',
-        element: <Profile />,
-      },
-    ],
   },
 ]);

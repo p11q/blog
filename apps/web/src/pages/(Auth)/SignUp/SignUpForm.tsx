@@ -18,8 +18,8 @@ import type { SignUpDto } from './SignUp';
 
 const formSchema = z
   .object({
-    name: z.string().min(1, 'Required'),
     email: z.email(),
+    name: z.string().min(1, 'Required'),
     password: z.string().min(6, 'At least 6 characters'),
     passwordRepeat: z.string().min(6, 'At least 6 characters'),
   })
@@ -30,11 +30,15 @@ const formSchema = z
 
 interface Props {
   error: Error | null;
-  reset: () => void;
   onSubmit: (data: SignUpDto) => void;
+  reset: () => void;
 }
 
-export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
+export const SignUpForm = ({
+  error,
+  onSubmit,
+  reset,
+}: Props): React.JSX.Element => {
   const form = useForm({
     mode: 'onChange',
     resolver: zodResolver(formSchema),
@@ -48,27 +52,27 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
           Enter your email below to create your account
         </CardDescription>
         <CardAction>
-          <Link to="/sign-in">
-            <Button variant="link">Sign In</Button>
-          </Link>
+          <Button variant="link" asChild>
+            <Link to="/sign-in">Sign In</Link>
+          </Button>
         </CardAction>
       </CardHeader>
       <CardContent>
         <form id="singup-form" onSubmit={form.handleSubmit(onSubmit)}>
           <div className="flex flex-col gap-6">
             <Controller
-              name="name"
               control={form.control}
+              name="name"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="name">Name</FieldLabel>
                   <Input
                     {...field}
-                    id="name"
                     aria-invalid={fieldState.invalid}
-                    type="name"
-                    placeholder="name"
                     autoComplete="off"
+                    id="name"
+                    placeholder="name"
+                    type="name"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -79,18 +83,18 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
             />
 
             <Controller
-              name="email"
               control={form.control}
+              name="email"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="email">Email</FieldLabel>
                   <Input
                     {...field}
-                    id="email"
                     aria-invalid={fieldState.invalid}
-                    type="email"
-                    placeholder="m@example.com"
                     autoComplete="off"
+                    id="email"
+                    placeholder="m@example.com"
+                    type="email"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -100,19 +104,18 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
               )}
             />
             <Controller
-              name="password"
               control={form.control}
-              rules={{ deps: ['password', 'passwordRepeat'] }}
+              name="password"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <Input
                     {...field}
-                    id="password"
                     aria-invalid={fieldState.invalid}
-                    type="password"
-                    placeholder="At least 6 characters"
                     autoComplete="off"
+                    id="password"
+                    placeholder="At least 6 characters"
+                    type="password"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -120,11 +123,11 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
                   )}
                 </Field>
               )}
+              rules={{ deps: ['password', 'passwordRepeat'] }}
             />
             <Controller
-              name="passwordRepeat"
               control={form.control}
-              rules={{ deps: ['password', 'passwordRepeat'] }}
+              name="passwordRepeat"
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="passwordRepeat">
@@ -132,11 +135,11 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
                   </FieldLabel>
                   <Input
                     {...field}
-                    id="passwordRepeat"
                     aria-invalid={fieldState.invalid}
-                    type="password"
-                    placeholder="Confirm password"
                     autoComplete="off"
+                    id="passwordRepeat"
+                    placeholder="Confirm password"
+                    type="password"
                     onInput={reset}
                   />
                   {fieldState.invalid && (
@@ -144,13 +147,14 @@ export const SignUpForm = ({ error, reset, onSubmit }: Props) => {
                   )}
                 </Field>
               )}
+              rules={{ deps: ['password', 'passwordRepeat'] }}
             />
           </div>
         </form>
         <FieldError errors={error ? [error] : []} />
       </CardContent>
       <CardFooter className="flex-col gap-2">
-        <Button type="submit" form="singup-form">
+        <Button form="singup-form" type="submit">
           Sign up
         </Button>
       </CardFooter>

@@ -24,6 +24,46 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
+  async getTokens(user: UserEntity): Promise<SignInResponceDto> {
+    const payload = {
+      email: user.email,
+      id: user.id,
+      name: user.name,
+      role: user.role,
+    };
+
+    const refreshToken = new RefreshTokenEntity();
+    refreshToken.token = this.generateSecureToken();
+
+    const expires = new Date();
+    expires.setDate(expires.getDate() + 30);
+    refreshToken.expires = expires;
+    refreshToken.user = user;
+
+    const refreshTokenCreated = await refreshToken.save();
+
+    const accessToken = await this.jwtService.signAsync(payload);
+
+    return new SignInResponceDto(accessToken, refreshTokenCreated.token);
+  }
+
+  async refreshToken(token: string): Promise<SignInResponceDto> {
+    const now = new Date();
+
+    const refreshToken = await this.refreshTokenRepo.findOne({
+      relations: ['user'],
+      where: {
+        expires: MoreThan(now),
+        token,
+      },
+    });
+    if (!refreshToken) {
+      throw new UnauthorizedException('Invalid refresh token');
+    }
+
+    return this.getTokens(refreshToken.user);
+  }
+
   async signIn(data: SignInDto): Promise<SignInResponceDto> {
     const user = await this.userService.getUserByEmail(data.email);
 
@@ -42,8 +82,6 @@ export class AuthService {
   async signUp(data: SignUpDto): Promise<SignInResponceDto> {
     const user = await this.userService.getUserByEmail(data.email);
 
-    console.log('@@@@@@@@@@@@@@@', data);
-
     if (user) {
       throw new BadRequestException('User already exists');
     }
@@ -55,53 +93,11 @@ export class AuthService {
       data.email,
       hashPass,
     );
+
     return this.getTokens(userCreate);
   }
 
   private generateSecureToken(): string {
     return randomBytes(48).toString('base64url');
-  }
-
-  async getTokens(user: UserEntity): Promise<SignInResponceDto> {
-    const payload = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role,
-    };
-
-    const refreshToken = new RefreshTokenEntity();
-    refreshToken.token = this.generateSecureToken();
-
-    const expires = new Date();
-    expires.setDate(expires.getDate() + 30);
-    refreshToken.expires = expires;
-    refreshToken.user = user;
-
-    const refreshTokenCreated = await refreshToken.save();
-
-    const accessToken = await this.jwtService.signAsync(payload);
-    return new SignInResponceDto(accessToken, refreshTokenCreated.token);
-  }
-
-  async refreshToken(token: string): Promise<SignInResponceDto> {
-    const now = new Date();
-
-    const refreshToken = await this.refreshTokenRepo.findOne({
-      relations: ['user'],
-      where: {
-        token,
-        expires: MoreThan(now),
-      },
-    });
-    if (!refreshToken) {
-      throw new UnauthorizedException('Invalid refresh token');
-    }
-
-    return this.getTokens(refreshToken.user);
-  }
-
-  async validateUserById(userId: number) {
-    return await this.userService.getUserById(userId);
   }
 }

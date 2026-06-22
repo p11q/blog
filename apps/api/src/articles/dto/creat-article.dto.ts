@@ -3,21 +3,6 @@ import { IsString, IsNotEmpty } from 'class-validator';
 
 export class CreateArticleDto {
   @ApiProperty({
-    description: 'Заголовок статьи',
-    example: 'Случай из моей жизни ...',
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
-  title: string;
-
-  @ApiProperty({
-    description: 'Основное содержание Вашей статьи',
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
-  text: string;
-
-  @ApiProperty({
     description: 'Краткое описание Вашей статьи',
   })
   @IsString()
@@ -31,4 +16,19 @@ export class CreateArticleDto {
   @IsString()
   @IsNotEmpty({ message: 'Полe tags обязательно для заполнения.' })
   tags: string;
+
+  @ApiProperty({
+    description: 'Основное содержание Вашей статьи',
+  })
+  @IsString()
+  @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
+  text: string;
+
+  @ApiProperty({
+    description: 'Заголовок статьи',
+    example: 'Случай из моей жизни ...',
+  })
+  @IsString()
+  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
+  title: string;
 }

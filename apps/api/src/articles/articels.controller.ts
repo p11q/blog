@@ -32,23 +32,39 @@ export class ArticalsController {
     type: () => CreateArticleDto,
   })
   @ApiResponse({
-    status: 200,
     description: 'Созданная статья',
+    status: 200,
     type: ArticleDto,
   })
   @UseGuards(AuthGuard)
-  create(@User() author: UserEntity, @Body() data: CreateArticleDto) {
+  create(
+    @User() author: UserEntity,
+    @Body() data: CreateArticleDto,
+  ): Promise<ArticleDto> {
     return this.service.create(author, data);
   }
 
-  @Get()
-  @ApiOperation({ summary: 'Вывод всех статей' })
-  @ApiResponse({
-    status: 200,
-    type: ArticleDto,
+  @Delete(':id')
+  @Get(':id')
+  @ApiOperation({ summary: 'Удаление статьи по ее индификатору' })
+  @ApiParam({
+    name: 'id_author',
+    type: () => Number,
   })
-  getList() {
-    return this.service.getList();
+  @ApiParam({
+    name: 'id_article',
+    type: () => Number,
+  })
+  @ApiResponse({
+    description: 'InternalServerErrorException',
+    status: 500,
+  })
+  @UseGuards(AuthGuard)
+  deleteById(
+    @User('id') id_author: number,
+    @Param('id') id_article: number,
+  ): Promise<void> {
+    return this.service.deleteById(id_author, id_article);
   }
 
   @Get(':id')
@@ -62,11 +78,21 @@ export class ArticalsController {
     type: ArticleDto,
   })
   @ApiResponse({
-    status: 500,
     description: 'InternalServerErrorException',
+    status: 500,
   })
-  getById(@Param('id') id: number) {
+  getById(@Param('id') id: number): Promise<ArticleDto> {
     return this.service.getById(id);
+  }
+
+  @Get()
+  @ApiOperation({ summary: 'Вывод всех статей' })
+  @ApiResponse({
+    status: 200,
+    type: ArticleDto,
+  })
+  getList(): Promise<ArticleDto[]> {
+    return this.service.getList();
   }
 
   @Put(':id')
@@ -88,35 +114,15 @@ export class ArticalsController {
     type: ArticleDto,
   })
   @ApiResponse({
-    status: 500,
     description: 'InternalServerErrorException',
+    status: 500,
   })
   @UseGuards(AuthGuard)
   updateById(
     @User('id') id_author: number,
     @Param('id') id_article: number,
     @Body() data: CreateArticleDto,
-  ) {
+  ): Promise<ArticleDto> {
     return this.service.updateById(id_author, id_article, data);
-  }
-
-  @Delete(':id')
-  @Get(':id')
-  @ApiOperation({ summary: 'Удаление статьи по ее индификатору' })
-  @ApiParam({
-    name: 'id_author',
-    type: () => Number,
-  })
-  @ApiParam({
-    name: 'id_article',
-    type: () => Number,
-  })
-  @ApiResponse({
-    status: 500,
-    description: 'InternalServerErrorException',
-  })
-  @UseGuards(AuthGuard)
-  deleteById(@User('id') id_author: number, @Param('id') id_article: number) {
-    return this.service.deleteById(id_author, id_article);
   }
 }

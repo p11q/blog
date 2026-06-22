@@ -5,6 +5,7 @@ import { queryFactory as profileQueryFactory } from '@/pages/Profile/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { apiCreateComment } from '../api/apiCreateComment';
+import { apiDeleteComment } from '../api/apiDeleteComment';
 import { apiUpdateComment } from '../api/apiUpdateComment';
 import { articlesQueryFactory } from '../api/queryFactory';
 
@@ -12,15 +13,15 @@ interface Props {
   articleId: number;
 }
 
-const Avatar = ({ name }: { name: string }) => (
+const Avatar = ({ name }: { name: string }): React.JSX.Element => (
   <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
     {getInitials(name)}
   </div>
 );
 
-export const Comments = ({ articleId }: Props) => {
+export const Comments = ({ articleId }: Props): React.JSX.Element => {
   const [text, setText] = useState('');
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<null | number>(null);
   const [editingText, setEditingText] = useState('');
   const queryClient = useQueryClient();
 
@@ -29,7 +30,7 @@ export const Comments = ({ articleId }: Props) => {
   );
   const { data: profile } = useQuery(profileQueryFactory.profileOptions());
 
-  const invalidateComments = () =>
+  const invalidateComments = (): Promise<void> =>
     queryClient.invalidateQueries({
       queryKey: ['articles', articleId, 'comments'],
     });
@@ -38,7 +39,7 @@ export const Comments = ({ articleId }: Props) => {
     mutationFn: () => apiCreateComment(articleId, text.trim()),
     onSuccess: () => {
       setText('');
-      invalidateComments();
+      void invalidateComments();
     },
   });
 
@@ -48,11 +49,18 @@ export const Comments = ({ articleId }: Props) => {
     onSuccess: () => {
       setEditingId(null);
       setEditingText('');
-      invalidateComments();
+      void invalidateComments();
     },
   });
 
-  const startEdit = (commentId: number, currentText: string) => {
+  const deleteMutation = useMutation({
+    mutationFn: (commentId: number) => apiDeleteComment(articleId, commentId),
+    onSuccess: () => {
+      void invalidateComments();
+    },
+  });
+
+  const startEdit = (commentId: number, currentText: string): void => {
     setEditingId(commentId);
     setEditingText(currentText);
   };
@@ -65,16 +73,20 @@ export const Comments = ({ articleId }: Props) => {
         <Avatar name={profile?.name ?? '?'} />
         <div className="flex flex-1 flex-col gap-2">
           <Textarea
-            value={text}
-            onChange={(event) => setText(event.target.value)}
-            placeholder="Напишите комментарий..."
             className="rounded-2xl"
+            placeholder="Напишите комментарий..."
+            value={text}
+            onChange={(event) => {
+              setText(event.target.value);
+            }}
           />
           <Button
             className="self-end"
-            size="sm"
             disabled={!text.trim() || createMutation.isPending}
-            onClick={() => createMutation.mutate()}
+            size="sm"
+            onClick={() => {
+              createMutation.mutate();
+            }}
           >
             Отправить
           </Button>
@@ -82,7 +94,9 @@ export const Comments = ({ articleId }: Props) => {
       </div>
 
       {isLoading && (
-        <p className="text-sm text-muted-foreground">Загрузка комментариев...</p>
+        <p className="text-sm text-muted-foreground">
+          Загрузка комментариев...
+        </p>
       )}
 
       {!isLoading && comments?.length === 0 && (
@@ -106,24 +120,30 @@ export const Comments = ({ articleId }: Props) => {
                 {isEditing ? (
                   <div className="flex flex-col gap-2">
                     <Textarea
-                      value={editingText}
-                      onChange={(event) => setEditingText(event.target.value)}
                       className="rounded-2xl"
+                      value={editingText}
+                      onChange={(event) => {
+                        setEditingText(event.target.value);
+                      }}
                     />
                     <div className="flex gap-2">
                       <Button
-                        size="sm"
                         disabled={
                           !editingText.trim() || updateMutation.isPending
                         }
-                        onClick={() => updateMutation.mutate(comment.id)}
+                        size="sm"
+                        onClick={() => {
+                          updateMutation.mutate(comment.id);
+                        }}
                       >
                         Сохранить
                       </Button>
                       <Button
                         size="sm"
                         variant="ghost"
-                        onClick={() => setEditingId(null)}
+                        onClick={() => {
+                          setEditingId(null);
+                        }}
                       >
                         Отмена
                       </Button>
@@ -143,13 +163,29 @@ export const Comments = ({ articleId }: Props) => {
                       <span>{formatRelativeTime(comment.createAt)}</span>
                       {isEdited && <span>изменено</span>}
                       {isOwn && (
-                        <button
-                          type="button"
-                          className="font-medium transition-colors hover:text-foreground"
-                          onClick={() => startEdit(comment.id, comment.text)}
-                        >
-                          Редактировать
-                        </button>
+                        <>
+                          <Button
+                            className="h-auto px-2 py-1 text-xs font-medium"
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              startEdit(comment.id, comment.text);
+                            }}
+                          >
+                            Редактировать
+                          </Button>
+                          <Button
+                            className="h-auto px-2 py-1 text-xs font-medium text-destructive"
+                            disabled={deleteMutation.isPending}
+                            size="sm"
+                            variant="ghost"
+                            onClick={() => {
+                              deleteMutation.mutate(comment.id);
+                            }}
+                          >
+                            Удалить
+                          </Button>
+                        </>
                       )}
                     </div>
                   </>

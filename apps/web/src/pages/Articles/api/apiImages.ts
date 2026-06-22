@@ -9,19 +9,24 @@ const imageSchema = z.object({
 
 const imagesSchema = z.array(imageSchema);
 
-export const apiGetImages = (articleId: number) =>
+export const apiGetImages = (
+  articleId: number,
+): Promise<z.infer<typeof imagesSchema>> =>
   fetchWithZod(imagesSchema, {
     method: 'GET',
     url: `upload/${articleId}`,
   });
 
-export const apiUploadImage = (articleId: number, file: File) => {
+export const apiUploadImage = (
+  articleId: number,
+  file: File,
+): Promise<z.infer<typeof imageSchema>> => {
   const formData = new FormData();
   formData.append('file', file);
 
   return fetchWithZod(imageSchema, {
+    data: formData,
     method: 'POST',
     url: `upload/${articleId}`,
-    data: formData,
   });
 };

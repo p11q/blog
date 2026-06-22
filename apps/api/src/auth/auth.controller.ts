@@ -10,6 +10,26 @@ import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 export class AuthController {
   constructor(private readonly AuthService: AuthService) {}
 
+  @Post('refresh-token')
+  @ApiOperation({ summary: 'Обновление Refresh токена' })
+  @ApiParam({
+    name: 'data',
+    type: () => RefreshTokenEntity,
+  })
+  @ApiResponse({
+    description: 'Если не корректный Refresh token (UnauthorizedException)',
+    status: 401,
+  })
+  @ApiResponse({
+    description: 'Access and Refresh tokens',
+    status: 200,
+  })
+  async refreshToken(
+    @Body() data: RefreshTokenEntity,
+  ): Promise<SignInResponceDto> {
+    return this.AuthService.refreshToken(data.token);
+  }
+
   @Post('sign-in')
   @ApiOperation({ summary: 'Аутентификация' })
   @ApiParam({
@@ -17,17 +37,17 @@ export class AuthController {
     type: () => SignInDto,
   })
   @ApiResponse({
-    status: 400,
     description:
       'Если пользователь с таким email не наден (BadRequestException)',
+    status: 400,
   })
   @ApiResponse({
-    status: 401,
     description: 'Если не правильный пароль (UnauthorizedException)',
+    status: 401,
   })
   @ApiResponse({
-    status: 200,
     description: 'Access and Refresh tokens',
+    status: 200,
   })
   async signIn(@Body() data: SignInDto): Promise<SignInResponceDto> {
     return this.AuthService.signIn(data);
@@ -40,35 +60,15 @@ export class AuthController {
     type: () => SignUpDto,
   })
   @ApiResponse({
-    status: 400,
     description:
       'Если пользователь с таким email уже существует (BadRequestException)',
+    status: 400,
   })
   @ApiResponse({
-    status: 200,
     description: 'Access and Refresh tokens',
+    status: 200,
   })
   async singUp(@Body() data: SignUpDto): Promise<SignInResponceDto> {
     return this.AuthService.signUp(data);
-  }
-
-  @Post('refresh-token')
-  @ApiOperation({ summary: 'Обновление Refresh токена' })
-  @ApiParam({
-    name: 'data',
-    type: () => RefreshTokenEntity,
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Если не корректный Refresh token (UnauthorizedException)',
-  })
-  @ApiResponse({
-    status: 200,
-    description: 'Access and Refresh tokens',
-  })
-  async refreshToken(
-    @Body() data: RefreshTokenEntity,
-  ): Promise<SignInResponceDto> {
-    return this.AuthService.refreshToken(data.token);
   }
 }

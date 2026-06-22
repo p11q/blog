@@ -7,7 +7,7 @@ import { writeFileSync } from 'node:fs';
 import { join, resolve } from 'node:path';
 import { AppModule } from './app.module';
 
-async function bootstrap() {
+async function bootstrap(): Promise<void> {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
   app.useStaticAssets(join(process.cwd(), 'db', 'uploads'), {
@@ -34,9 +34,9 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 
   app.enableCors({
-    origin: config.getOrThrow<string>('CORS_ORIGINS'),
-    methods: config.getOrThrow<string>('CORS_METHODS'),
     credentials: true,
+    methods: config.getOrThrow<string>('CORS_METHODS'),
+    origin: config.getOrThrow<string>('CORS_ORIGINS'),
   });
 
   await app.listen(
@@ -44,4 +44,5 @@ async function bootstrap() {
     config.getOrThrow<string>('SERVER_HOST'),
   );
 }
+
 void bootstrap();

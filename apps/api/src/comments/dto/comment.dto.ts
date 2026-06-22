@@ -1,29 +1,25 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { ArticleEntity } from '~/shared/module/article.entity';
 import { CommentEntity } from '~/shared/module/comment.entity';
-import { UserEntity } from '~/shared/module/user.entity'; // добавьте импорт
 
 export class CommentDto {
+  @ApiProperty()
+  article: number;
+
+  @ApiProperty()
+  author: number;
+
+  @IsDate()
+  createAt: Date;
+
   @IsNumber()
   id: number;
 
   @IsString()
   @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
   text: string;
-
-  @IsDate()
-  createAt: Date;
-
   @IsDate()
   updateAt: Date;
-
-  @ApiProperty()
-  author: number;
-
-  @ApiProperty()
-  article: number;
-main
 
   constructor(ent: CommentEntity) {
     this.id = ent.id;

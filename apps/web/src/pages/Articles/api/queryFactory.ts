@@ -6,40 +6,40 @@ import { apiGetImages } from './apiImages';
 import { apiGetDislikesCount, apiGetLikesCount } from './apiReactions';
 
 export const articlesQueryFactory = {
-  listOptions: () =>
+  commentsOptions: (id: number) =>
     queryOptions({
-      queryKey: ['articles'] as const,
-      queryFn: () => apiGetArticles(),
+      queryFn: () => apiGetComments(id),
+      queryKey: ['articles', id, 'comments'] as const,
       retry: 0,
     }),
   detailOptions: (id: number) =>
     queryOptions({
-      queryKey: ['articles', id] as const,
       queryFn: () => apiGetArticle(id),
-      retry: 0,
-    }),
-  commentsOptions: (id: number) =>
-    queryOptions({
-      queryKey: ['articles', id, 'comments'] as const,
-      queryFn: () => apiGetComments(id),
-      retry: 0,
-    }),
-  likesOptions: (id: number) =>
-    queryOptions({
-      queryKey: ['articles', id, 'likes'] as const,
-      queryFn: () => apiGetLikesCount(id),
+      queryKey: ['articles', id] as const,
       retry: 0,
     }),
   dislikesOptions: (id: number) =>
     queryOptions({
-      queryKey: ['articles', id, 'dislikes'] as const,
       queryFn: () => apiGetDislikesCount(id),
+      queryKey: ['articles', id, 'dislikes'] as const,
       retry: 0,
     }),
   imagesOptions: (id: number) =>
     queryOptions({
-      queryKey: ['articles', id, 'images'] as const,
       queryFn: () => apiGetImages(id),
+      queryKey: ['articles', id, 'images'] as const,
+      retry: 0,
+    }),
+  likesOptions: (id: number) =>
+    queryOptions({
+      queryFn: () => apiGetLikesCount(id),
+      queryKey: ['articles', id, 'likes'] as const,
+      retry: 0,
+    }),
+  listOptions: () =>
+    queryOptions({
+      queryFn: () => apiGetArticles(),
+      queryKey: ['articles'] as const,
       retry: 0,
     }),
 };

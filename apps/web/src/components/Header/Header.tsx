@@ -6,12 +6,12 @@ import { useQuery } from '@tanstack/react-query';
 import { NavLink } from 'react-router-dom';
 
 const NAV_LINKS = [
-  { to: '/', label: 'Главная', end: true },
-  { to: '/articles', label: 'Статьи', end: false },
-  { to: '/profile', label: 'Профиль', end: false },
+  { end: true, label: 'Главная', to: '/' },
+  { end: false, label: 'Статьи', to: '/articles' },
+  { end: false, label: 'Профиль', to: '/profile' },
 ];
 
-export const Header = () => {
+export const Header = (): React.JSX.Element => {
   const { onLogout } = useAuth();
   const { data: profile } = useQuery(queryFactory.profileOptions());
 
@@ -20,13 +20,17 @@ export const Header = () => {
       <div className="mx-auto flex h-14 w-full max-w-5xl items-center justify-between gap-4 px-4">
         <nav className="flex items-center gap-1">
           {NAV_LINKS.map((link) => (
-            <NavLink key={link.to} to={link.to} end={link.end}>
-              {({ isActive }) => (
-                <Button variant={isActive ? 'secondary' : 'ghost'} size="sm">
-                  {link.label}
-                </Button>
-              )}
-            </NavLink>
+            <Button
+              key={link.to}
+              className="aria-[current=page]:bg-secondary aria-[current=page]:text-secondary-foreground"
+              size="sm"
+              variant="ghost"
+              asChild
+            >
+              <NavLink end={link.end} to={link.to}>
+                {link.label}
+              </NavLink>
+            </Button>
           ))}
         </nav>
 
@@ -39,7 +43,7 @@ export const Header = () => {
           >
             {profile?.name ?? '...'}
           </span>
-          <Button variant="outline" size="sm" onClick={onLogout}>
+          <Button size="sm" variant="outline" onClick={onLogout}>
             Выйти
           </Button>
         </div>

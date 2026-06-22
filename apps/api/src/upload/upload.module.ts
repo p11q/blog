@@ -10,6 +10,7 @@ import { diskStorage } from 'multer';
 import { extname } from 'node:path';
 
 @Module({
+  controllers: [UploadController],
   imports: [
     TypeOrmModule.forFeature([ArticleEntity, UploadEntity]),
     AuthModule,
@@ -23,7 +24,6 @@ import { extname } from 'node:path';
       }),
     }),
   ],
-  controllers: [UploadController],
   providers: [UploadService],
 })
 export class UploadModule {}

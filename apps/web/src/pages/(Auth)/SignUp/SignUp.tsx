@@ -5,16 +5,16 @@ import z from 'zod';
 import { SignUpForm } from './SignUpForm';
 
 export interface SignUpDto {
-  name: string;
   email: string;
+  name: string;
   password: string;
   passwordRepeat: string;
 }
 
-export const SignUp = () => {
+export const SignUp = (): React.JSX.Element => {
   const { onLogin } = useAuth();
 
-  const { mutate, error, reset } = useMutation({
+  const { error, mutate, reset } = useMutation({
     mutationFn: (data: SignUpDto) =>
       fetchWithZod(
         z.object({
@@ -22,22 +22,24 @@ export const SignUp = () => {
           refreshToken: z.string(),
         }),
         {
+          data,
           method: 'POST',
           url: 'auth/sign-up',
-          data,
         },
       ),
 
-    onSuccess: (data) => onLogin(data),
+    onSuccess: (data) => {
+      onLogin(data);
+    },
   });
 
-  const onSubmit = (data: SignUpDto) => {
+  const onSubmit = (data: SignUpDto): void => {
     mutate(data);
   };
 
   return (
     <div className="h-screen w-full flex items-center justify-center">
-      <SignUpForm onSubmit={onSubmit} error={error} reset={reset} />
+      <SignUpForm error={error} reset={reset} onSubmit={onSubmit} />
     </div>
   );
 };

@@ -9,17 +9,17 @@ import { useQuery } from '@tanstack/react-query';
 import { queryFactory } from './api';
 
 const FIELD_LABELS: Record<string, string> = {
+  email: 'Email',
   id: 'ID',
   name: 'Имя',
-  email: 'Email',
   role: 'Роль',
 };
 
-export const Profile = () => {
+export const Profile = (): React.JSX.Element => {
   const {
     data: profile,
-    isLoading,
     error,
+    isLoading,
   } = useQuery(queryFactory.profileOptions());
 
   if (isLoading) {

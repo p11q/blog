@@ -28,12 +28,13 @@ export async function fetchWithZod<TData>(
       typeof err.response.data === 'object' &&
       'message' in err.response.data
     ) {
-      const { message } = err.response.data;
+      const { message } = err.response.data as { message?: unknown };
 
-      if (message) {
+      if (typeof message === 'string' && message) {
         throw new Error(message, { cause: err });
       }
     }
+
     throw err;
   }
 }

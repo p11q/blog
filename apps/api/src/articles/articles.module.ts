@@ -7,8 +7,8 @@ import { UserEntity } from '~/shared/module/user.entity';
 import { AuthModule } from '~/auth/auth.module';
 
 @Module({
+  controllers: [ArticalsController],
   imports: [TypeOrmModule.forFeature([ArticleEntity, UserEntity]), AuthModule],
   providers: [ArticlesService],
-  controllers: [ArticalsController],
 })
 export class ArticalsModule {}

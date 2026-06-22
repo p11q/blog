@@ -1,33 +1,32 @@
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
 import { ArticleEntity } from '~/shared/module/article.entity';
-import { UserEntity } from '~/shared/module/user.entity'; // добавьте импорт
 
 export class ArticleDto {
+  author?: number;
+
+  @IsDate()
+  createAt: Date;
+
+  @IsString()
+  @IsNotEmpty({ message: 'Полe description обязательно для заполнения.' })
+  description: string;
+
   @IsNumber()
   id: number;
 
   @IsString()
-  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
-  title: string;
+  @IsNotEmpty({ message: 'Полe tags обязательно для заполнения.' })
+  tags: string;
 
   @IsString()
   @IsNotEmpty({ message: 'Полe text обязательно для заполнения.' })
   text: string;
 
   @IsString()
-  @IsNotEmpty({ message: 'Полe description обязательно для заполнения.' })
-  description: string;
-
-  @IsString()
-  @IsNotEmpty({ message: 'Полe tags обязательно для заполнения.' })
-  tags: string;
-
-  @IsDate()
-  createAt: Date;
-
+  @IsNotEmpty({ message: 'Полe title обязательно для заполнения.' })
+  title: string;
   @IsDate()
   updateAt: Date;
-  author?: number;
 
   constructor(ent: ArticleEntity) {
     this.id = ent.id;

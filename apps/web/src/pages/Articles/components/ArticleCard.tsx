@@ -1,4 +1,5 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -12,14 +13,22 @@ import type { Article } from '../api/article.schema';
 
 interface Props {
   article: Article;
+  canDelete?: boolean;
+  isDeleting?: boolean;
+  onDelete?: () => void;
 }
 
-export const ArticleCard = ({ article }: Props) => {
-  return (
-    <Link to={`/articles/${article.id}`} className="block">
+export const ArticleCard = ({
+  article,
+  canDelete = false,
+  isDeleting = false,
+  onDelete,
+}: Props): React.JSX.Element => (
+  <div className="relative">
+    <Link className="block" to={`/articles/${article.id}`}>
       <Card className="h-full transition-shadow hover:ring-foreground/20">
         <CardHeader>
-          <CardTitle>{article.title}</CardTitle>
+          <CardTitle className="pr-20">{article.title}</CardTitle>
           {article.description && (
             <CardDescription className="line-clamp-2">
               {article.description}
@@ -34,5 +43,20 @@ export const ArticleCard = ({ article }: Props) => {
         </CardContent>
       </Card>
     </Link>
-  );
-};
+    {canDelete && (
+      <Button
+        className="absolute top-3 right-3"
+        disabled={isDeleting}
+        size="sm"
+        variant="destructive"
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onDelete?.();
+        }}
+      >
+        Удалить
+      </Button>
+    )}
+  </div>
+);

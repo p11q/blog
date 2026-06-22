@@ -7,18 +7,20 @@ interface Props {
   articleId: number;
 }
 
-export const Reactions = ({ articleId }: Props) => {
+export const Reactions = ({ articleId }: Props): React.JSX.Element => {
   const queryClient = useQueryClient();
-  const { data: likes } = useQuery(articlesQueryFactory.likesOptions(articleId));
+  const { data: likes } = useQuery(
+    articlesQueryFactory.likesOptions(articleId),
+  );
   const { data: dislikes } = useQuery(
     articlesQueryFactory.dislikesOptions(articleId),
   );
 
-  const refreshReactions = () => {
-    queryClient.invalidateQueries({
+  const refreshReactions = (): void => {
+    void queryClient.invalidateQueries({
       queryKey: ['articles', articleId, 'likes'],
     });
-    queryClient.invalidateQueries({
+    void queryClient.invalidateQueries({
       queryKey: ['articles', articleId, 'dislikes'],
     });
   };
@@ -35,18 +37,22 @@ export const Reactions = ({ articleId }: Props) => {
   return (
     <div className="flex items-center gap-2">
       <Button
-        variant="outline"
-        size="sm"
-        onClick={() => likeMutation.mutate()}
         disabled={likeMutation.isPending}
+        size="sm"
+        variant="outline"
+        onClick={() => {
+          likeMutation.mutate();
+        }}
       >
         Нравится · {likes ?? 0}
       </Button>
       <Button
-        variant="outline"
-        size="sm"
-        onClick={() => dislikeMutation.mutate()}
         disabled={dislikeMutation.isPending}
+        size="sm"
+        variant="outline"
+        onClick={() => {
+          dislikeMutation.mutate();
+        }}
       >
         Не нравится · {dislikes ?? 0}
       </Button>

@@ -15,22 +15,13 @@ import { User } from '~/libs/common/decorators/user.decorator';
 import { UserEntity } from '~/shared/module/user.entity';
 import { AuthGuard } from '~/guards/auth.guard';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-import { SignUpDto } from '~/auth/dto/sign-up.dto';
 import { CommentDto } from './dto/comment.dto';
+import { CommentEntity } from '~/shared/module/comment.entity';
+import { CommentListItem } from './comments.service';
 
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
-
-  @Get(':id_article')
-  @ApiOperation({ summary: 'Вывод комментариев статьи' })
-  @ApiParam({
-    name: 'id_article',
-    type: () => Number,
-  })
-  getList(@Param('id_article') id_article: number) {
-    return this.commentsService.getList(id_article);
-  }
 
   @Post(':id')
   @ApiOperation({ summary: 'Создание комментрария' })
@@ -47,23 +38,61 @@ export class CommentsController {
     type: () => CreateCommentDto,
   })
   @ApiResponse({
-    status: 500,
     description:
       'Если статьи с таким индификатором не существует (InternalServerErrorException)',
+    status: 500,
   })
   @ApiResponse({
-    status: 200,
     description: 'CommentDto',
     example:
       ' id: number, text: string,  createAt: Date, updateAt: Data,  author?: UserEntity, article?: ArticleEntity',
+    status: 200,
   })
   @UseGuards(AuthGuard)
   create(
     @User() author: UserEntity,
     @Param('id') id_article: number,
     @Body() data: CreateCommentDto,
-  ) {
+  ): Promise<CommentDto> {
     return this.commentsService.create(author, id_article, data);
+  }
+
+  @Delete(':id_article/:id_comment')
+  @ApiOperation({ summary: 'Редактирование комментрария' })
+  @ApiParam({
+    name: 'id_article',
+    type: () => Number,
+  })
+  @ApiParam({
+    name: 'id_comment',
+    type: () => Number,
+  })
+  @ApiParam({
+    name: 'id_author',
+    type: () => Number,
+  })
+  @ApiResponse({
+    description:
+      'Если удаление статьи производит не ее автор или не пользователь с ролью Admin (InternalServerErrorException)',
+    status: 500,
+  })
+  @UseGuards(AuthGuard)
+  deleteById(
+    @Param('id_article') id_article: number,
+    @Param('id_comment') id_comment: number,
+    @User('id') id_author: number,
+  ): Promise<void> {
+    return this.commentsService.deleteById(id_article, id_comment, id_author);
+  }
+
+  @Get(':id_article')
+  @ApiOperation({ summary: 'Вывод комментариев статьи' })
+  @ApiParam({
+    name: 'id_article',
+    type: () => Number,
+  })
+  getList(@Param('id_article') id_article: number): Promise<CommentListItem[]> {
+    return this.commentsService.getList(id_article);
   }
 
   @Put(':id_article/:id_comment')
@@ -85,15 +114,15 @@ export class CommentsController {
     type: () => UpdateCommentDto,
   })
   @ApiResponse({
-    status: 500,
     description:
       'Если редактирование статьи производит не ее автор или не пользователь с ролью Admin (InternalServerErrorException)',
+    status: 500,
   })
   @ApiResponse({
-    status: 200,
     description: 'CommentDto',
     example:
       ' id: number, text: string,  createAt: Date, updateAt: Data,  author?: UserEntity, article?: ArticleEntity',
+    status: 200,
   })
   @UseGuards(AuthGuard)
   updateById(
@@ -101,40 +130,12 @@ export class CommentsController {
     @Param('id_comment') id_comment: number,
     @User('id') id_author: number,
     @Body() data: UpdateCommentDto,
-  ) {
+  ): Promise<CommentEntity | null> {
     return this.commentsService.updateById(
       id_article,
       id_comment,
       id_author,
       data,
     );
-  }
-
-  @Delete(':id_article/:id_comment')
-  @ApiOperation({ summary: 'Редактирование комментрария' })
-  @ApiParam({
-    name: 'id_article',
-    type: () => Number,
-  })
-  @ApiParam({
-    name: 'id_comment',
-    type: () => Number,
-  })
-  @ApiParam({
-    name: 'id_author',
-    type: () => Number,
-  })
-  @ApiResponse({
-    status: 500,
-    description:
-      'Если удаление статьи производит не ее автор или не пользователь с ролью Admin (InternalServerErrorException)',
-  })
-  @UseGuards(AuthGuard)
-  deleteById(
-    @Param('id_article') id_article: number,
-    @Param('id_comment') id_comment: number,
-    @User('id') id_author: number,
-  ) {
-    return this.commentsService.deleteById(id_article, id_comment, id_author);
   }
 }

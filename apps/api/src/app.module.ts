@@ -20,8 +20,8 @@ import { UploadModule } from './upload/upload.module';
     LikeModule,
     DislikeModule,
     ConfigModule.forRoot({
-      isGlobal: true,
       envFilePath: '.env',
+      isGlobal: true,
     }),
     UploadModule,
   ],

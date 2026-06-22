@@ -11,7 +11,7 @@ import { ArticleImages } from './components/ArticleImages';
 import { Comments } from './components/Comments';
 import { Reactions } from './components/Reactions';
 
-export const ArticleDetail = () => {
+export const ArticleDetail = (): React.JSX.Element => {
   const { id } = useParams();
   const articleId = Number(id);
   const navigate = useNavigate();
@@ -19,16 +19,16 @@ export const ArticleDetail = () => {
 
   const {
     data: article,
-    isLoading,
     error,
+    isLoading,
   } = useQuery(articlesQueryFactory.detailOptions(articleId));
   const { data: profile } = useQuery(profileQueryFactory.profileOptions());
 
   const deleteMutation = useMutation({
     mutationFn: () => apiDeleteArticle(articleId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['articles'] });
-      navigate('/articles');
+      void queryClient.invalidateQueries({ queryKey: ['articles'] });
+      void navigate('/articles');
     },
   });
 
@@ -50,7 +50,7 @@ export const ArticleDetail = () => {
 
   return (
     <article className="flex flex-col gap-6">
-      <Link to="/articles" className="text-sm text-muted-foreground">
+      <Link className="text-sm text-muted-foreground" to="/articles">
         ← Ко всем статьям
       </Link>
 
@@ -59,16 +59,16 @@ export const ArticleDetail = () => {
           <h1 className="text-3xl font-semibold">{article.title}</h1>
           {isAuthor && (
             <div className="flex shrink-0 gap-2">
-              <Link to={`/articles/${article.id}/edit`}>
-                <Button variant="outline" size="sm">
-                  Редактировать
-                </Button>
-              </Link>
+              <Button size="sm" variant="outline" asChild>
+                <Link to={`/articles/${article.id}/edit`}>Редактировать</Link>
+              </Button>
               <Button
-                variant="destructive"
-                size="sm"
                 disabled={deleteMutation.isPending}
-                onClick={() => deleteMutation.mutate()}
+                size="sm"
+                variant="destructive"
+                onClick={() => {
+                  deleteMutation.mutate();
+                }}
               >
                 Удалить
               </Button>

@@ -5,7 +5,7 @@ import { AuthProvider } from './providers';
 
 const queryClient = new QueryClient();
 
-function App() {
+function App(): React.JSX.Element {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

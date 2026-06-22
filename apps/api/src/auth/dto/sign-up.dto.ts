@@ -11,15 +11,6 @@ import { IsPasswordsMatchingConstraint } from '~/libs/common/decorators/is-passw
 export class SignUpDto {
   @ApiProperty({
     description:
-      'Имя пользователя (Поле не может быть пустым и иметь формат отличный от string)',
-    example: 'Иван Абрамов',
-  })
-  @IsString()
-  @IsNotEmpty({ message: 'Полe Name обязательно для заполнения.' })
-  name: string;
-
-  @ApiProperty({
-    description:
       'Email, с помощью которого будет регистрироваться пользователь (Поле не может быть пустым и иметь формат отличный от string)',
     example: 'example@example.com',
   })
@@ -27,6 +18,15 @@ export class SignUpDto {
   @IsEmail({}, { message: 'Неккоректный формат Email.' })
   @IsNotEmpty({ message: 'Полe Email обязательно для заполнения.' })
   email: string;
+
+  @ApiProperty({
+    description:
+      'Имя пользователя (Поле не может быть пустым и иметь формат отличный от string)',
+    example: 'Иван Абрамов',
+  })
+  @IsString()
+  @IsNotEmpty({ message: 'Полe Name обязательно для заполнения.' })
+  name: string;
 
   @ApiProperty({
     description:

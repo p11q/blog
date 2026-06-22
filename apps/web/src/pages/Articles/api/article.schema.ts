@@ -4,20 +4,26 @@ const articleAuthorSchema = z
   .union([z.number(), z.object({ id: z.number(), name: z.string() })])
   .nullish()
   .transform((author) => {
-    if (author == null) return null;
-    if (typeof author === 'number') return { id: author, name: null };
+    if (author == null) {
+      return null;
+    }
+
+    if (typeof author === 'number') {
+      return { id: author, name: null };
+    }
+
     return author;
   });
 
 export const articleSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-  text: z.string(),
-  description: z.string().nullable(),
-  tags: z.string().nullable(),
-  createAt: z.string(),
-  updateAt: z.string(),
   author: articleAuthorSchema,
+  createAt: z.string(),
+  description: z.string().nullable(),
+  id: z.number(),
+  tags: z.string().nullable(),
+  text: z.string(),
+  title: z.string(),
+  updateAt: z.string(),
 });
 
 export const articlesSchema = z.array(articleSchema);

@@ -17,15 +17,16 @@ instance.interceptors.request.use(
     const tokens = getTokens();
 
     if (tokens?.accessToken) {
-      config.headers['Authorization'] = `Bearer ${tokens.accessToken}`;
+      config.headers.Authorization = `Bearer ${tokens.accessToken}`;
     }
 
     return config;
   },
-  (error) => Promise.reject(error),
+  (error: unknown) =>
+    Promise.reject(error instanceof Error ? error : new Error(String(error))),
 );
 
-let refreshPromise: Promise<string> | null = null;
+let refreshPromise: null | Promise<string> = null;
 
 const refreshAccessToken = async (): Promise<string> => {
   const tokens = getTokens();
@@ -72,13 +73,17 @@ instance.interceptors.response.use(
         });
 
       const accessToken = await refreshPromise;
-      original.headers['Authorization'] = `Bearer ${accessToken}`;
+      original.headers.Authorization = `Bearer ${accessToken}`;
 
-      return instance(original);
+      return await instance(original);
     } catch (refreshError) {
       clearTokens();
 
-      return Promise.reject(refreshError);
+      return Promise.reject(
+        refreshError instanceof Error
+          ? refreshError
+          : new Error(String(refreshError)),
+      );
     }
   },
 );

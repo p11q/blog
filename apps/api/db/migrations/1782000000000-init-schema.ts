@@ -124,15 +124,33 @@ export class InitSchema1782000000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`ALTER TABLE "upload" DROP CONSTRAINT "FK_upload_article"`);
-    await queryRunner.query(`ALTER TABLE "dislike" DROP CONSTRAINT "FK_dislike_article"`);
-    await queryRunner.query(`ALTER TABLE "dislike" DROP CONSTRAINT "FK_dislike_user"`);
-    await queryRunner.query(`ALTER TABLE "like" DROP CONSTRAINT "FK_like_article"`);
-    await queryRunner.query(`ALTER TABLE "like" DROP CONSTRAINT "FK_like_user"`);
-    await queryRunner.query(`ALTER TABLE "refresh_token" DROP CONSTRAINT "FK_refresh_token_user"`);
-    await queryRunner.query(`ALTER TABLE "comment" DROP CONSTRAINT "FK_comment_user"`);
-    await queryRunner.query(`ALTER TABLE "comment" DROP CONSTRAINT "FK_comment_article"`);
-    await queryRunner.query(`ALTER TABLE "articles" DROP CONSTRAINT "FK_articles_user"`);
+    await queryRunner.query(
+      `ALTER TABLE "upload" DROP CONSTRAINT "FK_upload_article"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "dislike" DROP CONSTRAINT "FK_dislike_article"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "dislike" DROP CONSTRAINT "FK_dislike_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "like" DROP CONSTRAINT "FK_like_article"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "like" DROP CONSTRAINT "FK_like_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "refresh_token" DROP CONSTRAINT "FK_refresh_token_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "comment" DROP CONSTRAINT "FK_comment_user"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "comment" DROP CONSTRAINT "FK_comment_article"`,
+    );
+    await queryRunner.query(
+      `ALTER TABLE "articles" DROP CONSTRAINT "FK_articles_user"`,
+    );
 
     await queryRunner.query(`DROP TABLE "upload"`);
     await queryRunner.query(`DROP TABLE "dislike"`);

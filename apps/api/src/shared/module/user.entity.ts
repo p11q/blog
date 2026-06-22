@@ -24,60 +24,6 @@ export enum EUserRole {
 @Entity('user')
 export class UserEntity extends BaseEntity {
   @ApiProperty({
-    description: 'Индификатор пользователя',
-    type: () => Number,
-  })
-  @PrimaryGeneratedColumn()
-  @IsNumber()
-  id: number;
-
-  @ApiProperty({
-    description: 'Имя пользователя',
-    type: () => String,
-  })
-  @Column()
-  @IsString()
-  name: string;
-
-  @ApiProperty({
-    description: 'Email пользователя',
-    type: () => String,
-  })
-  @Column()
-  @IsString()
-  email: string;
-
-  @ApiProperty({
-    description: 'Пароль пользователя',
-    type: () => String,
-  })
-  @Column()
-  @IsString()
-  password: string;
-
-  @ApiProperty({
-    description: 'Роль пользователя',
-    enum: ['admin', 'user'],
-    type: () => EUserRole,
-  })
-  @Column({ enum: EUserRole, default: EUserRole.user })
-  role: EUserRole;
-
-  @ApiProperty({
-    description: 'Дата создания пользователя',
-    type: () => Date,
-  })
-  @CreateDateColumn({ name: 'create_at' })
-  createAt: Date;
-
-  @ApiProperty({
-    description: 'Дата обновления информации о пользователе',
-    type: () => Date,
-  })
-  @UpdateDateColumn({ name: 'update_at' })
-  updateAt: Date;
-
-  @ApiProperty({
     description: 'Индификаторы статей, которые создал пользователь',
     type: () => ArticleEntity,
   })
@@ -93,15 +39,69 @@ export class UserEntity extends BaseEntity {
   @JoinColumn({ name: 'comment_id' })
   comments: number[];
 
-  @OneToMany(() => LikeEntity, (item) => item.author)
-  @JoinColumn({ name: 'like_id' })
-  likes: number[];
+  @ApiProperty({
+    description: 'Дата создания пользователя',
+    type: () => Date,
+  })
+  @CreateDateColumn({ name: 'create_at' })
+  createAt: Date;
 
   @OneToMany(() => DislikeEntity, (item) => item.author)
   @JoinColumn({ name: 'dislike_id' })
   dislikes: number[];
 
+  @ApiProperty({
+    description: 'Email пользователя',
+    type: () => String,
+  })
+  @Column()
+  @IsString()
+  email: string;
+
+  @ApiProperty({
+    description: 'Индификатор пользователя',
+    type: () => Number,
+  })
+  @PrimaryGeneratedColumn()
+  @IsNumber()
+  id: number;
+
+  @OneToMany(() => LikeEntity, (item) => item.author)
+  @JoinColumn({ name: 'like_id' })
+  likes: number[];
+
+  @ApiProperty({
+    description: 'Имя пользователя',
+    type: () => String,
+  })
+  @Column()
+  @IsString()
+  name: string;
+
+  @ApiProperty({
+    description: 'Пароль пользователя',
+    type: () => String,
+  })
+  @Column()
+  @IsString()
+  password: string;
+
   @ApiProperty({ type: () => RefreshTokenEntity })
   @OneToMany(() => RefreshTokenEntity, (item) => item.user)
   refreshTokens: RefreshTokenEntity[];
+
+  @ApiProperty({
+    description: 'Роль пользователя',
+    enum: ['admin', 'user'],
+    type: () => EUserRole,
+  })
+  @Column({ default: EUserRole.user, enum: EUserRole })
+  role: EUserRole;
+
+  @ApiProperty({
+    description: 'Дата обновления информации о пользователе',
+    type: () => Date,
+  })
+  @UpdateDateColumn({ name: 'update_at' })
+  updateAt: Date;
 }

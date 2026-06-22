@@ -13,23 +13,28 @@ export default class LikeService {
     private readonly likeRepo: Repository<LikeEntity>,
   ) {}
 
-  async togglelLike(id_author: number, id_article: number) {
+  async getList(id_article: number): Promise<number> {
+    return this.likeRepo.countBy({ articleId: id_article });
+  }
+
+  async togglelLike(id_author: number, id_article: number): Promise<string> {
     const isExistingLike = await this.likeRepo.findOne({
       where: {
-        userId: id_author,
         articleId: id_article,
+        userId: id_author,
       },
     });
 
     if (isExistingLike) {
       await this.likeRepo.delete(isExistingLike.id);
+
       return 'unlike';
     }
 
     const isExistingDisike = await this.dislikeRepo.findOne({
       where: {
-        userId: id_author,
         articleId: id_article,
+        userId: id_author,
       },
     });
 
@@ -38,14 +43,11 @@ export default class LikeService {
     }
 
     const new_like = this.likeRepo.create({
-      userId: id_author,
       articleId: id_article,
+      userId: id_author,
     });
     await this.likeRepo.save(new_like);
-    return 'like';
-  }
 
-  async getList(id_article: number) {
-    return this.likeRepo.countBy({ articleId: id_article });
+    return 'like';
   }
 }

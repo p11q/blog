@@ -11,13 +11,13 @@ import { UserEntity } from './user.entity';
 
 @Entity('refresh_token')
 export class RefreshTokenEntity extends BaseEntity {
-  @ApiProperty({ type: () => String })
-  @PrimaryColumn()
-  token: string;
-
   @ApiProperty({ type: () => Date })
   @Column()
   expires: Date;
+
+  @ApiProperty({ type: () => String })
+  @PrimaryColumn()
+  token: string;
 
   @ApiProperty({ type: () => UserEntity })
   @ManyToOne(() => UserEntity, (user) => user.refreshTokens)

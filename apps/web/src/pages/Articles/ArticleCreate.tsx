@@ -10,15 +10,15 @@ import { useNavigate } from 'react-router-dom';
 import { apiCreateArticle } from './api/apiCreateArticle';
 import { ArticleForm, type ArticleFormValues } from './components/ArticleForm';
 
-export const ArticleCreate = () => {
-  const navigate = useNavigate();
+export const ArticleCreate = (): React.JSX.Element => {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
-  const { mutate, isPending, error } = useMutation({
+  const { error, isPending, mutate } = useMutation({
     mutationFn: (values: ArticleFormValues) => apiCreateArticle(values),
     onSuccess: (article) => {
-      queryClient.invalidateQueries({ queryKey: ['articles'] });
-      navigate(`/articles/${article.id}`);
+      void queryClient.invalidateQueries({ queryKey: ['articles'] });
+      void navigate(`/articles/${article.id}`);
     },
   });
 
@@ -30,9 +30,9 @@ export const ArticleCreate = () => {
       </CardHeader>
       <CardContent>
         <ArticleForm
-          submitLabel="Создать"
-          isPending={isPending}
           error={error}
+          isPending={isPending}
+          submitLabel="Создать"
           onSubmit={mutate}
         />
       </CardContent>

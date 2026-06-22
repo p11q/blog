@@ -1,10 +1,13 @@
 import { fetchWithZod } from '@/lib/fetchWithZod';
 import type { ArticlePayload } from './apiCreateArticle';
-import { articleSchema } from './article.schema';
+import { type Article, articleSchema } from './article.schema';
 
-export const apiUpdateArticle = (id: number, payload: ArticlePayload) =>
+export const apiUpdateArticle = (
+  id: number,
+  payload: ArticlePayload,
+): Promise<Article> =>
   fetchWithZod(articleSchema, {
+    data: payload,
     method: 'PUT',
     url: `articles/${id}`,
-    data: payload,
   });

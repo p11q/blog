@@ -13,7 +13,7 @@ const tokensSchema = z.object({
   refreshToken: z.string(),
 });
 
-export const getTokens = (): Tokens | null => {
+export const getTokens = (): null | Tokens => {
   const raw = localStorage.getItem(STORAGE_KEY);
 
   if (!raw) {
@@ -29,12 +29,12 @@ export const getTokens = (): Tokens | null => {
   }
 };
 
-export const setTokens = (tokens: Tokens) => {
+export const setTokens = (tokens: Tokens): void => {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(tokens));
   window.dispatchEvent(new Event(TOKENS_CHANGED_EVENT));
 };
 
-export const clearTokens = () => {
+export const clearTokens = (): void => {
   localStorage.removeItem(STORAGE_KEY);
   window.dispatchEvent(new Event(TOKENS_CHANGED_EVENT));
 };

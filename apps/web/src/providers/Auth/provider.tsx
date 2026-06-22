@@ -8,11 +8,17 @@ import {
   type Tokens,
 } from './tokenStorage';
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [tokens, setTokensState] = useState<Tokens | null>(() => getTokens());
+export const AuthProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}): React.JSX.Element => {
+  const [tokens, setTokensState] = useState<null | Tokens>(() => getTokens());
 
   useEffect(() => {
-    const sync = () => setTokensState(getTokens());
+    const sync = (): void => {
+      setTokensState(getTokens());
+    };
 
     window.addEventListener(TOKENS_CHANGED_EVENT, sync);
     window.addEventListener('storage', sync);
@@ -23,14 +29,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     };
   }, []);
 
-  const onLogin = useCallback((data: Tokens) => setTokens(data), []);
-  const onLogout = useCallback(() => clearTokens(), []);
+  const onLogin = useCallback((data: Tokens) => {
+    setTokens(data);
+  }, []);
+  const onLogout = useCallback(() => {
+    clearTokens();
+  }, []);
 
   const value = useMemo(
     () => ({
-      tokens,
       onLogin,
       onLogout,
+      tokens,
     }),
     [tokens, onLogin, onLogout],
   );

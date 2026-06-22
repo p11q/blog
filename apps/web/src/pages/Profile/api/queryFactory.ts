@@ -4,9 +4,8 @@ import { apiGetProfile } from './apiGetProfile';
 export const queryFactory = {
   profileOptions: () =>
     queryOptions({
-      queryKey: ['profile'] as const,
       queryFn: () => apiGetProfile(),
+      queryKey: ['profile'] as const,
       retry: 0,
-      staleTime: Infinity,
     }),
 };

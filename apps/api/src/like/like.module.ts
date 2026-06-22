@@ -9,6 +9,7 @@ import { LikeController } from './like.controller';
 import LikeService from './like.service';
 
 @Module({
+  controllers: [LikeController],
   imports: [
     TypeOrmModule.forFeature([
       DislikeEntity,
@@ -18,7 +19,6 @@ import LikeService from './like.service';
     ]),
     AuthModule,
   ],
-  controllers: [LikeController],
   providers: [LikeService],
 })
 export class LikeModule {}

@@ -1,21 +1,34 @@
 import { Button } from '@/components/ui/button';
-import { useQuery } from '@tanstack/react-query';
+import { queryFactory as profileQueryFactory } from '@/pages/Profile/api';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from 'react-router-dom';
+import { apiDeleteArticle } from './api/apiDeleteArticle';
 import { articlesQueryFactory } from './api/queryFactory';
 import { ArticleCard } from './components/ArticleCard';
 
-export const ArticlesList = () => {
-  const { data: articles, isLoading, error } = useQuery(
-    articlesQueryFactory.listOptions(),
-  );
+export const ArticlesList = (): React.JSX.Element => {
+  const queryClient = useQueryClient();
+  const {
+    data: articles,
+    error,
+    isLoading,
+  } = useQuery(articlesQueryFactory.listOptions());
+  const { data: profile } = useQuery(profileQueryFactory.profileOptions());
+
+  const deleteMutation = useMutation({
+    mutationFn: (articleId: number) => apiDeleteArticle(articleId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({ queryKey: ['articles'] });
+    },
+  });
 
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-2xl font-semibold">Статьи</h1>
-        <Link to="/articles/create">
-          <Button>Создать статью</Button>
-        </Link>
+        <Button asChild>
+          <Link to="/articles/create">Создать статью</Link>
+        </Button>
       </div>
 
       {isLoading && (
@@ -36,7 +49,18 @@ export const ArticlesList = () => {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {articles?.map((article) => (
-          <ArticleCard key={article.id} article={article} />
+          <ArticleCard
+            key={article.id}
+            article={article}
+            canDelete={!!profile && article.author?.id === profile.id}
+            isDeleting={
+              deleteMutation.isPending &&
+              deleteMutation.variables === article.id
+            }
+            onDelete={() => {
+              deleteMutation.mutate(article.id);
+            }}
+          />
         ))}
       </div>
     </div>
