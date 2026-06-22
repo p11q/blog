@@ -14,7 +14,7 @@ import { ArticleEntity } from './article.entity';
 import { LikeEntity } from './likes.entity';
 import { ApiProperty } from '@nestjs/swagger';
 
-@Entity('comments')
+@Entity('comment')
 export class CommentEntity extends BaseEntity {
   @ApiProperty({
     description: 'Индификатор комментария',
@@ -50,7 +50,7 @@ export class CommentEntity extends BaseEntity {
   })
   @ManyToOne(() => ArticleEntity, (item) => item.comments)
   @JoinColumn({ name: 'article_id' })
-  article: ArticleEntity;
+  article: number;
 
   @ApiProperty({
     description: 'Индификатор авторая, который оставил комментарий',
@@ -58,9 +58,5 @@ export class CommentEntity extends BaseEntity {
   })
   @ManyToOne(() => UserEntity, (item) => item.comments)
   @JoinColumn({ name: 'user_id' })
-  author: UserEntity;
-
-  // @OneToMany(() => LikeEntity, (item) => item.comment)
-  // @JoinColumn({ name: 'like_id' })
-  // likes: number[];
+  author: number;
 }

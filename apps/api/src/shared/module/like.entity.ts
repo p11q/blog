@@ -11,16 +11,16 @@ import {
 import { UserEntity } from './user.entity';
 import { ArticleEntity } from './article.entity';
 
-@Entity('likes')
+@Entity('like')
 export class LikeEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
   @Column({ name: 'user_id' })
-  userId: number; // ← явная колонка
+  userId: number;
 
   @Column({ name: 'article_id' })
-  articleId: number; // ← явная колонка
+  articleId: number;
 
   @CreateDateColumn({ name: 'create_at' })
   createAt: Date;
@@ -30,13 +30,9 @@ export class LikeEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (item) => item.likes)
   @JoinColumn({ name: 'user_id' })
-  author: UserEntity;
+  author: number;
 
   @ManyToOne(() => ArticleEntity, (item) => item.likes)
   @JoinColumn({ name: 'article_id' })
-  article: ArticleEntity;
-
-  // @ManyToOne(() => CommentEntity, (item) => item.likes)
-  // @JoinColumn({ name: 'comment_id' })
-  // comment: number;
+  article: number;
 }

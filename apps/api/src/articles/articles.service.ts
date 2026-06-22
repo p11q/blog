@@ -12,8 +12,6 @@ export class ArticlesService {
   constructor(
     @InjectRepository(ArticleEntity)
     private readonly articRepo: Repository<ArticleEntity>,
-    @InjectRepository(UserEntity)
-    private readonly userRepo: Repository<UserEntity>,
   ) {}
 
   async create(author: UserEntity, data: CreateArticleDto) {
@@ -22,7 +20,7 @@ export class ArticlesService {
     articale.text = data.text;
     articale.description = data.description;
     articale.tags = data.tags;
-    articale.author = author;
+    articale.author = author.id;
 
     const res = await articale.save();
 
@@ -57,9 +55,7 @@ export class ArticlesService {
       .update(
         {
           id: id_article,
-          author: {
-            id: id_author,
-          },
+          author: id_author,
         },
         {
           title: data.title,
@@ -79,9 +75,7 @@ export class ArticlesService {
       .findOne({
         where: {
           id: id_article,
-          author: {
-            id: id_author,
-          },
+          author: id_author,
         },
         relations: ['author'],
       })

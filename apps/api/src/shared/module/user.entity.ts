@@ -11,8 +11,8 @@ import {
 import { ArticleEntity } from './article.entity';
 import { RefreshTokenEntity } from './refresh-token.entity';
 import { CommentEntity } from './comment.entity';
-import { IsEnum, IsNumber, IsString } from 'class-validator';
-import { LikeEntity } from './likes.entity';
+import { IsNumber, IsString } from 'class-validator';
+import { LikeEntity } from './like.entity';
 import { DislikeEntity } from './dislike.entity';
 import { IsNumber } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
@@ -22,7 +22,7 @@ export enum EUserRole {
   user = 'user',
 }
 
-@Entity('users')
+@Entity('user')
 export class UserEntity extends BaseEntity {
   @ApiProperty({
     description: 'Индификатор пользователя',
@@ -83,19 +83,23 @@ export class UserEntity extends BaseEntity {
     type: () => ArticleEntity,
   })
   @OneToMany(() => ArticleEntity, (item) => item.author)
-  articles: ArticleEntity[];
+  @JoinColumn({ name: 'article_id' })
+  articles: number[];
 
   @ApiProperty({
     description: 'Индификаторы комментариев, которые создал пользователь',
     type: () => CommentEntity,
   })
   @OneToMany(() => CommentEntity, (item) => item.author)
-  comments: CommentEntity[];
+  @JoinColumn({ name: 'comment_id' })
+  comments: number[];
 
   @OneToMany(() => LikeEntity, (item) => item.author)
+  @JoinColumn({ name: 'like_id' })
   likes: number[];
 
   @OneToMany(() => DislikeEntity, (item) => item.author)
+  @JoinColumn({ name: 'dislike_id' })
   dislikes: number[];
 
   @ApiProperty({ type: () => RefreshTokenEntity })

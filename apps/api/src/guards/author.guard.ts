@@ -17,7 +17,7 @@ export class AuthorGuard implements CanActivate {
     const article = await this.articleService.getById(id);
     const user = request.user;
 
-    if (user && article && user.id === article.author?.id) {
+    if (user && article && user.id === article.author) {
       return true;
     }
     throw new BadRequestException(

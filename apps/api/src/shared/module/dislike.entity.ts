@@ -11,7 +11,7 @@ import {
 import { UserEntity } from './user.entity';
 import { ArticleEntity } from './article.entity';
 
-@Entity('dislikes')
+@Entity('dislike')
 export class DislikeEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
@@ -30,13 +30,9 @@ export class DislikeEntity extends BaseEntity {
 
   @ManyToOne(() => UserEntity, (item) => item.dislikes)
   @JoinColumn({ name: 'user_id' })
-  author: UserEntity;
+  author: number;
 
   @ManyToOne(() => ArticleEntity, (item) => item.dislikes)
   @JoinColumn({ name: 'article_id' })
-  article: ArticleEntity;
-
-  // @ManyToOne(() => CommentEntity, (item) => item.likes)
-  // @JoinColumn({ name: 'comment_id' })
-  // comment: number;
+  article: number;
 }

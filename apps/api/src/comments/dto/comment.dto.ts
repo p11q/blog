@@ -18,9 +18,12 @@ export class CommentDto {
   @IsDate()
   updateAt: Date;
 
-  author?: UserEntity;
+  @ApiProperty()
+  author: number;
 
-  article?: ArticleEntity;
+  @ApiProperty()
+  article: number;
+main
 
   constructor(ent: CommentEntity) {
     this.id = ent.id;

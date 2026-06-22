@@ -23,7 +23,6 @@ export class CommentsService {
     const article = await this.articRepo
       .findOne({
         where: { id: id_article },
-        relations: ['author'],
       })
       .catch(() => {
         throw new InternalServerErrorException();
@@ -31,8 +30,8 @@ export class CommentsService {
 
     const comment = new CommentEntity();
     comment.text = data.text;
-    comment.author = user;
-    comment.article = article;
+    comment.author = user.id;
+    comment.article = article.id;
 
     const res = await comment.save();
 
@@ -63,7 +62,6 @@ export class CommentsService {
 
     return this.commentRepo.findOne({
       where: { id: id_comment },
-      relations: ['author', 'article'],
     });
   }
 
@@ -96,8 +94,8 @@ export class CommentsService {
     const comment = await this.commentRepo.findOne({
       where: {
         id: id_comment,
-        article: { id: id_article },
-        author: { id: id_author },
+        article: id_article,
+        author: id_author,
       },
     });
     return !!comment;

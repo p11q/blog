@@ -21,6 +21,6 @@ export class RefreshTokenEntity extends BaseEntity {
 
   @ApiProperty({ type: () => UserEntity })
   @ManyToOne(() => UserEntity, (user) => user.refreshTokens)
-  @JoinColumn({ name: 'user_id' })
+  @JoinColumn({ name: 'user' })
   user: UserEntity;
 }
