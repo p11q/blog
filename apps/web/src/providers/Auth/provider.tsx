@@ -1,52 +1,30 @@
-import { useCallback, useMemo, useState } from 'react';
-import z from 'zod';
-import { AuthContext, type Tokens } from './context';
-
-const storedUserSchema = z.object({
-  accessToken: z.string(),
-  refreshToken: z.string(),
-});
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { AuthContext } from './context';
+import {
+  clearTokens,
+  getTokens,
+  setTokens,
+  TOKENS_CHANGED_EVENT,
+  type Tokens,
+} from './tokenStorage';
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  const [tokens, setTokens] = useState<Tokens | null>(() => {
-    const parsedUserFromLocalStorage = localStorage.getItem('tokens');
+  const [tokens, setTokensState] = useState<Tokens | null>(() => getTokens());
 
-    const parsedUser = z
-      .string()
-      .transform((value) => {
-        try {
-          const objectFromString = JSON.parse(value) as unknown;
+  useEffect(() => {
+    const sync = () => setTokensState(getTokens());
 
-          if (
-            typeof objectFromString !== 'object' ||
-            objectFromString === null ||
-            Object.keys(objectFromString).length === 0
-          ) {
-            return null;
-          }
+    window.addEventListener(TOKENS_CHANGED_EVENT, sync);
+    window.addEventListener('storage', sync);
 
-          return objectFromString;
-        } catch {
-          return null;
-        }
-      })
-      .pipe(storedUserSchema.nullable())
-      .safeParse(parsedUserFromLocalStorage);
-
-    return parsedUser.success ? parsedUser.data : null;
-  });
-
-  const onLogin = useCallback((data: Tokens) => {
-    localStorage.setItem('tokens', JSON.stringify(data));
-
-    setTokens(data);
+    return () => {
+      window.removeEventListener(TOKENS_CHANGED_EVENT, sync);
+      window.removeEventListener('storage', sync);
+    };
   }, []);
 
-  const onLogout = useCallback(() => {
-    localStorage.removeItem('tokens');
-
-    setTokens(null);
-  }, []);
+  const onLogin = useCallback((data: Tokens) => setTokens(data), []);
+  const onLogout = useCallback(() => clearTokens(), []);
 
   const value = useMemo(
     () => ({

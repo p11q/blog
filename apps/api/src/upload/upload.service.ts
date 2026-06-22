@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { basename } from 'node:path';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '~/shared/module/article.entity';
 import { UploadEntity } from '~/shared/module/upload.entity';
@@ -9,6 +10,8 @@ export class UploadService {
   constructor(
     @InjectRepository(ArticleEntity)
     private readonly articRepo: Repository<ArticleEntity>,
+    @InjectRepository(UploadEntity)
+    private readonly uploadRepo: Repository<UploadEntity>,
   ) {}
 
   async uploadFile(
@@ -27,12 +30,32 @@ export class UploadService {
         throw new InternalServerErrorException();
       });
 
-    const new_file = new UploadEntity();
-    new_file.path = file.path;
-    new_file.article = article.id;
+    if (!article) {
+      throw new InternalServerErrorException();
+    }
 
-    new_file.save();
+    const upload = new UploadEntity();
+    upload.path = file.path;
+    upload.articleId = article.id;
 
-    return article;
+    const saved = await upload.save();
+
+    return this.toDto(saved);
+  }
+
+  async getList(id_article: number) {
+    const uploads = await this.uploadRepo.find({
+      where: { articleId: id_article },
+      order: { createAt: 'ASC' },
+    });
+
+    return uploads.map((upload) => this.toDto(upload));
+  }
+
+  private toDto(upload: UploadEntity) {
+    return {
+      id: upload.id,
+      url: `uploads/${basename(upload.path)}`,
+    };
   }
 }

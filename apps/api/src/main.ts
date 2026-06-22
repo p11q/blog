@@ -1,11 +1,18 @@
 import { ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestExpressApplication } from '@nestjs/platform-express';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { writeFileSync } from 'node:fs';
+import { join, resolve } from 'node:path';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+
+  app.useStaticAssets(join(process.cwd(), 'db', 'uploads'), {
+    prefix: '/uploads/',
+  });
 
   const config = app.get(ConfigService);
 
@@ -15,8 +22,14 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('blog')
     .build();
-  const documentFactory = () => SwaggerModule.createDocument(app, app_config);
-  SwaggerModule.setup('api', app, documentFactory);
+
+  const document = SwaggerModule.createDocument(app, app_config);
+  SwaggerModule.setup('api', app, document);
+
+  writeFileSync(
+    resolve(process.cwd(), 'openapi.json'),
+    JSON.stringify(document, null, 2),
+  );
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
 

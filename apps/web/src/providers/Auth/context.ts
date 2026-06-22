@@ -1,9 +1,7 @@
 import { createContext, useContext } from 'react';
+import type { Tokens } from './tokenStorage';
 
-export interface Tokens {
-  accessToken: string;
-  refreshToken: string;
-}
+export type { Tokens };
 
 export interface AuthContext {
   tokens: Tokens | null;

@@ -46,6 +46,7 @@
     "class-validator": "^0.15.1",
     "express": "^5.2.1",
     "globals": "^17.3.0",
+    "multer": "^2.2.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.18.0",
     "typeorm": "^0.3.28"

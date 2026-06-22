@@ -2,6 +2,7 @@ import {
   Body,
   Controller,
   Delete,
+  Get,
   Param,
   Post,
   Put,
@@ -20,6 +21,16 @@ import { CommentDto } from './dto/comment.dto';
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
+
+  @Get(':id_article')
+  @ApiOperation({ summary: 'Вывод комментариев статьи' })
+  @ApiParam({
+    name: 'id_article',
+    type: () => Number,
+  })
+  getList(@Param('id_article') id_article: number) {
+    return this.commentsService.getList(id_article);
+  }
 
   @Post(':id')
   @ApiOperation({ summary: 'Создание комментрария' })

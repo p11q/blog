@@ -57,6 +57,13 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Generated API contract
+openapi.json
+
+# Uploaded files
+apps/api/db/uploads/*
+!apps/api/db/uploads/.gitkeep
+
 # Misc
 .DS_Store
 *.pem

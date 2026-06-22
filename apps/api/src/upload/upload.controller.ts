@@ -1,5 +1,6 @@
 import {
   Controller,
+  Get,
   Param,
   Post,
   UploadedFile,
@@ -15,12 +16,17 @@ import { User } from '~/libs/common/decorators/user.decorator';
 export class UploadController {
   constructor(private readonly uploadService: UploadService) {}
 
+  @Get(':id_article')
+  getList(@Param('id_article') id_article: number) {
+    return this.uploadService.getList(id_article);
+  }
+
   @Post(':id_article')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   uploadFile(
     @User('id') id_author: number,
-    @Param('id_article') id_article,
+    @Param('id_article') id_article: number,
     @UploadedFile() file: Express.Multer.File,
   ) {
     return this.uploadService.uploadFile(id_author, id_article, file);

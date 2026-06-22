@@ -19,6 +19,27 @@ export class CommentsService {
     private readonly userRepo: Repository<UserEntity>,
   ) {}
 
+  async getList(id_article: number) {
+    const comments = await this.commentRepo
+      .createQueryBuilder('comment')
+      .leftJoinAndSelect('comment.author', 'author')
+      .where('comment.article_id = :id_article', { id_article })
+      .orderBy('comment.create_at', 'DESC')
+      .getMany();
+
+    return comments.map((comment) => {
+      const author = comment.author as unknown as UserEntity | null;
+
+      return {
+        id: comment.id,
+        text: comment.text,
+        createAt: comment.createAt,
+        updateAt: comment.updateAt,
+        author: author ? { id: author.id, name: author.name } : null,
+      };
+    });
+  }
+
   async create(user: UserEntity, id_article: number, data: CreateCommentDto) {
     const article = await this.articRepo
       .findOne({
