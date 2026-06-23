@@ -11,7 +11,7 @@ import {
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/creat-article.dto';
 import { AuthGuard } from '~/guards/auth.guard';
-import { UserEntity } from '~/shared/module/user.entity';
+import { UserEntity } from '~/shared/user.entity';
 import { User } from '~/libs/common/decorators/user.decorator';
 import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ArticleDto } from './dto/article.dto';

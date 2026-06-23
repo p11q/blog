@@ -5,10 +5,10 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { ArticleEntity } from '~/shared/module/article.entity';
-import { EUserRole, UserEntity } from '~/shared/module/user.entity';
+import { ArticleEntity } from '~/shared/article.entity';
+import { EUserRole, UserEntity } from '~/shared/user.entity';
 import { CreateCommentDto } from './dto/creat-comment.dto';
-import { CommentEntity } from '~/shared/module/comment.entity';
+import { CommentEntity } from '~/shared/comment.entity';
 import { CommentDto } from './dto/comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 

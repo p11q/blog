@@ -6,9 +6,9 @@ import {
 import { CreateArticleDto } from './dto/creat-article.dto';
 import { ArticleDto } from './dto/article.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ArticleEntity } from '~/shared/module/article.entity';
+import { ArticleEntity } from '~/shared/article.entity';
 import { Repository } from 'typeorm';
-import { UserEntity } from '~/shared/module/user.entity';
+import { UserEntity } from '~/shared/user.entity';
 import { UpdateArticleDto } from './dto/update-article.dto';
 
 @Injectable()

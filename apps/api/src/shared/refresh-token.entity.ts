@@ -9,7 +9,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from './user.entity';
 
-@Entity('refresh_token')
+@Entity('refresh_tokens')
 export class RefreshTokenEntity extends BaseEntity {
   @ApiProperty({ type: () => Date })
   @Column()

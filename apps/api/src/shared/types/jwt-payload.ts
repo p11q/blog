@@ -1,4 +1,4 @@
-import { UserEntity } from '~/shared/module/user.entity';
+import { UserEntity } from '~/shared/user.entity';
 
 export interface AuthenticatedRequest {
   headers: { authorization?: string };

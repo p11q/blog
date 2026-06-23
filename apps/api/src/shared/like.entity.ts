@@ -11,16 +11,16 @@ import {
 import { ArticleEntity } from './article.entity';
 import { UserEntity } from './user.entity';
 
-@Entity('dislike')
-export class DislikeEntity extends BaseEntity {
-  @ManyToOne(() => ArticleEntity, (item) => item.dislikes)
+@Entity('likes_')
+export class LikeEntity extends BaseEntity {
+  @ManyToOne(() => ArticleEntity, (item) => item.likes)
   @JoinColumn({ name: 'article_id' })
   article: number;
 
   @Column({ name: 'article_id' })
-  articleId: number; // ← явная колонка
+  articleId: number;
 
-  @ManyToOne(() => UserEntity, (item) => item.dislikes)
+  @ManyToOne(() => UserEntity, (item) => item.likes)
   @JoinColumn({ name: 'user_id' })
   author: number;
 
@@ -34,5 +34,5 @@ export class DislikeEntity extends BaseEntity {
   updateAt: Date;
 
   @Column({ name: 'user_id' })
-  userId: number; // ← явная колонка
+  userId: number;
 }

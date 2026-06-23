@@ -1,5 +1,5 @@
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { ArticleEntity } from '~/shared/module/article.entity';
+import { ArticleEntity } from '~/shared/article.entity';
 
 export class ArticleDto {
   author?: number;

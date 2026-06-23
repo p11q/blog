@@ -12,7 +12,7 @@ import {
 import { ArticleEntity } from './article.entity';
 import { UserEntity } from './user.entity';
 
-@Entity('comment')
+@Entity('comments')
 export class CommentEntity extends BaseEntity {
   @ApiProperty({
     description: 'Индификатор статьи, под которым оставлен комментарий',

@@ -2,8 +2,8 @@ import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { basename } from 'node:path';
 import { Repository } from 'typeorm';
-import { ArticleEntity } from '~/shared/module/article.entity';
-import { UploadEntity } from '~/shared/module/upload.entity';
+import { ArticleEntity } from '~/shared/article.entity';
+import { UploadEntity } from '~/shared/upload.entity';
 
 export interface UploadDto {
   id: number;

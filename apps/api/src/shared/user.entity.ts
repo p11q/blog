@@ -21,7 +21,7 @@ export enum EUserRole {
   user = 'user',
 }
 
-@Entity('user')
+@Entity('users')
 export class UserEntity extends BaseEntity {
   @ApiProperty({
     description: 'Индификаторы статей, которые создал пользователь',

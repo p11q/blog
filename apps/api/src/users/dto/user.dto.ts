@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { UserEntity } from '~/shared/module/user.entity';
+import { UserEntity } from '~/shared/user.entity';
 
 export class UserDto {
   @IsString()

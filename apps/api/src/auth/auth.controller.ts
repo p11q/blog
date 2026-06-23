@@ -3,7 +3,7 @@ import { AuthService } from './auth.service';
 import { SignInResponceDto } from './dto/sign-in-resp.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';
-import { RefreshTokenEntity } from '~/shared/module/refresh-token.entity';
+import { RefreshTokenEntity } from '~/shared/refresh-token.entity';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 
 @Controller('auth')

@@ -9,15 +9,20 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { ArticleEntity } from './article.entity';
+import { UserEntity } from './user.entity';
 
-@Entity('upload')
-export class UploadEntity extends BaseEntity {
-  @ManyToOne(() => ArticleEntity, (item) => item.files)
+@Entity('dislikes')
+export class DislikeEntity extends BaseEntity {
+  @ManyToOne(() => ArticleEntity, (item) => item.dislikes)
   @JoinColumn({ name: 'article_id' })
   article: number;
 
   @Column({ name: 'article_id' })
-  articleId: number;
+  articleId: number; // ← явная колонка
+
+  @ManyToOne(() => UserEntity, (item) => item.dislikes)
+  @JoinColumn({ name: 'user_id' })
+  author: number;
 
   @CreateDateColumn({ name: 'create_at' })
   createAt: Date;
@@ -25,9 +30,9 @@ export class UploadEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  path: string;
-
   @UpdateDateColumn({ name: 'update_at' })
   updateAt: Date;
+
+  @Column({ name: 'user_id' })
+  userId: number; // ← явная колонка
 }

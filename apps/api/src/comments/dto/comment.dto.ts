@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsDate, IsNotEmpty, IsNumber, IsString } from 'class-validator';
-import { CommentEntity } from '~/shared/module/comment.entity';
+import { CommentEntity } from '~/shared/comment.entity';
 
 export class CommentDto {
   @ApiProperty()

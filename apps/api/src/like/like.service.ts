@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { DislikeEntity } from '~/shared/module/dislike.entity';
-import { LikeEntity } from '~/shared/module/like.entity';
+import { DislikeEntity } from '~/shared/dislike.entity';
+import { LikeEntity } from '~/shared/like.entity';
 
 @Injectable()
 export default class LikeService {

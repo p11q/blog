@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { CommentsController } from './comments.controller';
 import { CommentsService } from './comments.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ArticleEntity } from '~/shared/module/article.entity';
-import { UserEntity } from '~/shared/module/user.entity';
+import { ArticleEntity } from '~/shared/article.entity';
+import { UserEntity } from '~/shared/user.entity';
 import { AuthModule } from '~/auth/auth.module';
-import { CommentEntity } from '~/shared/module/comment.entity';
+import { CommentEntity } from '~/shared/comment.entity';
 
 @Module({
   controllers: [CommentsController],
