@@ -47,7 +47,7 @@ export class AuthService {
     return new SignInResponceDto(accessToken, refreshTokenCreated.token);
   }
 
-  async refreshToken(token: string): Promise<SignInResponceDto> {
+  async refreshToken(token: string) {
     const now = new Date();
 
     const refreshToken = await this.refreshTokenRepo.findOne({
