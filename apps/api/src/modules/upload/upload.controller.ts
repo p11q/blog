@@ -9,8 +9,8 @@ import {
 } from '@nestjs/common';
 import { UploadDto, UploadService } from './upload.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { AuthGuard } from '~/guards/auth.guard';
-import { User } from '~/libs/common/decorators/user.decorator';
+import { AuthGuard } from '~/modules/guards/auth.guard';
+import { User } from '~/modules/libs/common/decorators/user.decorator';
 
 @Controller('upload')
 export class UploadController {

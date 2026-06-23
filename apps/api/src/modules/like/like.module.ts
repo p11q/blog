@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthModule } from '~/auth/auth.module';
+import { AuthModule } from '~/modules/auth/auth.module';
 import { ArticleEntity } from '~/shared/article.entity';
 import { DislikeEntity } from '~/shared/dislike.entity';
 import { LikeEntity } from '~/shared/like.entity';
 import { UserEntity } from '~/shared/user.entity';
-import { DislikeController } from './dislike.controller';
-import DislikeService from './dislike.service';
+import { LikeController } from './like.controller';
+import LikeService from './like.service';
 
 @Module({
-  controllers: [DislikeController],
+  controllers: [LikeController],
   imports: [
     TypeOrmModule.forFeature([
       DislikeEntity,
@@ -19,6 +19,6 @@ import DislikeService from './dislike.service';
     ]),
     AuthModule,
   ],
-  providers: [DislikeService],
+  providers: [LikeService],
 })
-export class DislikeModule {}
+export class LikeModule {}

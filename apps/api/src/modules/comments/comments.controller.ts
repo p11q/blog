@@ -11,9 +11,9 @@ import {
 import { CommentsService } from './comments.service';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 import { CreateCommentDto } from './dto/creat-comment.dto';
-import { User } from '~/libs/common/decorators/user.decorator';
+import { User } from '~/modules/libs/common/decorators/user.decorator';
 import { UserEntity } from '~/shared/user.entity';
-import { AuthGuard } from '~/guards/auth.guard';
+import { AuthGuard } from '~/modules/guards/auth.guard';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { CommentDto } from './dto/comment.dto';
 import { CommentEntity } from '~/shared/comment.entity';

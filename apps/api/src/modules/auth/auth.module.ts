@@ -7,7 +7,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { RefreshTokenEntity } from '~/shared/refresh-token.entity';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UsersModule } from '~/users/users.module';
+import { UsersModule } from '~/modules/users/users.module';
 
 @Module({
   controllers: [AuthController],

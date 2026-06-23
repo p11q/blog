@@ -3,12 +3,10 @@ import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { SignInDto } from '~/auth/dto/sign-in.dto';
+import { SignInDto } from '~/modules/auth/dto/sign-in.dto';
 
 @ValidatorConstraint({ async: false, name: 'IsPasswordsMatchingConstraint' })
-export class IsPasswordsMatchingConstraint
-  implements ValidatorConstraintInterface
-{
+export class IsPasswordsMatchingConstraint implements ValidatorConstraintInterface {
   defaultMessage(_validationArguments?: ValidationArguments): string {
     return 'Введенные Вами пароли не совпадают';
   }

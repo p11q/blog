@@ -10,7 +10,7 @@ import { randomBytes } from 'node:crypto';
 import { MoreThan, Repository } from 'typeorm';
 import { RefreshTokenEntity } from '~/shared/refresh-token.entity';
 import { UserEntity } from '~/shared/user.entity';
-import { UsersService } from '~/users/users.service';
+import { UsersService } from '~/modules/users/users.service';
 import { SignInResponceDto } from './dto/sign-in-resp.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { SignUpDto } from './dto/sign-up.dto';

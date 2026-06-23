@@ -4,7 +4,7 @@ import { UploadService } from './upload.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ArticleEntity } from '~/shared/article.entity';
 import { UploadEntity } from '~/shared/upload.entity';
-import { AuthModule } from '~/auth/auth.module';
+import { AuthModule } from '~/modules/auth/auth.module';
 import { MulterModule } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { extname } from 'node:path';

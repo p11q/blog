@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
-import { AuthGuard } from '~/guards/auth.guard';
+import { AuthGuard } from '~/modules/guards/auth.guard';
 import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
 import type { AuthenticatedRequest } from '~/shared/types/jwt-payload';
 

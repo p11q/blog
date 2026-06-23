@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { User } from '~/libs/common/decorators/user.decorator';
-import { AuthGuard } from '~/guards/auth.guard';
+import { User } from '~/modules/libs/common/decorators/user.decorator';
+import { AuthGuard } from '~/modules/guards/auth.guard';
 import DislikeService from './dislike.service';
 
 @Controller('dislike')
