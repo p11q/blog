@@ -59,6 +59,14 @@ export class UserEntity extends BaseEntity {
   email: string;
 
   @ApiProperty({
+    description: 'Аватар пользователя',
+    type: () => String,
+  })
+  @Column()
+  @IsString()
+  icon: string;
+
+  @ApiProperty({
     description: 'Индификатор пользователя',
     type: () => Number,
   })

@@ -2,10 +2,14 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   NotFoundException,
+  ParseFilePipeBuilder,
   Post,
   Request,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UserDto } from './dto/user.dto';
@@ -15,6 +19,8 @@ import type { AuthenticatedRequest } from '~/shared/types/jwt-payload';
 import { UpdateUserDto } from './dto/updateUser.dto';
 import { User } from '../libs/common/decorators/user.decorator';
 import { UserEntity } from '~/shared/user.entity';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { UploadIconDto } from './dto/updateIcon.dto';
 
 @Controller('users')
 export class UsersController {
@@ -64,5 +70,27 @@ export class UsersController {
     }
 
     return new UserDto(user);
+  }
+
+  @Post('uploadIcon')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('icon'))
+  uploadIcon(
+    @User('id') id_author: number,
+    @UploadedFile(
+      new ParseFilePipeBuilder()
+        .addFileTypeValidator({
+          fileType: 'jpeg',
+        })
+        .addMaxSizeValidator({
+          maxSize: 1000,
+        })
+        .build({
+          errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,
+        }),
+    )
+    file: Express.Multer.File,
+  ): Promise<UploadIconDto> {
+    return this.UserService.uploadIcon(id_author, file);
   }
 }

@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { EUserRole, UserEntity } from '~/shared/user.entity';
 import { UpdateUserDto } from './dto/updateUser.dto';
-import { UserDto } from './dto/user.dto';
+import { UploadIconDto } from './dto/updateIcon.dto';
 
 @Injectable()
 export class UsersService {
@@ -53,13 +53,36 @@ export class UsersService {
           id: id_author,
         },
         {
-          name: data.name,
           email: data.email,
+          name: data.name,
         },
       )
       .catch(() => {
         throw new InternalServerErrorException();
       });
+
     return await this.getUserById(id_author);
+  }
+
+  async uploadIcon(
+    id_author: number,
+    file: Express.Multer.File,
+  ): Promise<UploadIconDto> {
+    await this.userRepo
+      .update(
+        {
+          id: id_author,
+        },
+        {
+          icon: file.path,
+        },
+      )
+      .catch(() => {
+        throw new InternalServerErrorException();
+      });
+    const author = await this.userRepo.findOne({ where: { id: id_author } });
+    const ret = new UploadIconDto(author?.icon);
+
+    return ret;
   }
 }
