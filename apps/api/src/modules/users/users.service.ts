@@ -1,5 +1,6 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { basename } from 'node:path';
 import { Repository } from 'typeorm';
 import { EUserRole, UserEntity } from '~/shared/user.entity';
 import { UpdateUserDto } from './dto/updateUser.dto';
@@ -81,8 +82,8 @@ export class UsersService {
         throw new InternalServerErrorException();
       });
     const author = await this.userRepo.findOne({ where: { id: id_author } });
-    const ret = new UploadIconDto(author?.icon);
+    const icon = author?.icon ? `uploads/${basename(author.icon)}` : null;
 
-    return ret;
+    return new UploadIconDto(icon);
   }
 }

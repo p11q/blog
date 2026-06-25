@@ -26,7 +26,7 @@ export class CommentDto {
     this.text = ent.text;
     this.createAt = ent.createAt;
     this.updateAt = ent.updateAt;
-    this.author = ent.author;
+    this.author = ent.authorId;
     this.article = ent.article;
   }
 }

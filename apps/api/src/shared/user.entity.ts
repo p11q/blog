@@ -60,11 +60,12 @@ export class UserEntity extends BaseEntity {
 
   @ApiProperty({
     description: 'Аватар пользователя',
+    nullable: true,
     type: () => String,
   })
-  @Column()
+  @Column({ nullable: true, type: 'varchar' })
   @IsString()
-  icon: string;
+  icon: null | string;
 
   @ApiProperty({
     description: 'Индификатор пользователя',

@@ -5,9 +5,9 @@ export class UploadIconDto {
   @ApiProperty({ nullable: true })
   @ValidateIf((_obj, value) => value !== null && value !== undefined)
   @IsString()
-  icon: string | undefined;
+  icon: null | string | undefined;
 
-  constructor(path: string | undefined) {
+  constructor(path: null | string | undefined) {
     this.icon = path;
   }
 }

@@ -4,8 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    "./config": "./src/config.mjs",
-    "./react-config": "./src/react-config.mjs"
+    "./config": "./src/config.ts",
+    "./react-config": "./src/react-config.ts"
   },
   "scripts": {
     "lint": "eslint .",

@@ -17,9 +17,10 @@ export const ArticlesList = (): React.JSX.Element => {
 
   const deleteMutation = useMutation({
     mutationFn: (articleId: number) => apiDeleteArticle(articleId),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['articles'] });
-    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.listOptions().queryKey,
+      }),
   });
 
   return (

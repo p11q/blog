@@ -8,6 +8,7 @@ import {
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { apiCreateArticle } from './api/apiCreateArticle';
+import { articlesQueryFactory } from './api/queryFactory';
 import { ArticleForm, type ArticleFormValues } from './components/ArticleForm';
 
 export const ArticleCreate = (): React.JSX.Element => {
@@ -16,9 +17,12 @@ export const ArticleCreate = (): React.JSX.Element => {
 
   const { error, isPending, mutate } = useMutation({
     mutationFn: (values: ArticleFormValues) => apiCreateArticle(values),
-    onSuccess: (article) => {
-      void queryClient.invalidateQueries({ queryKey: ['articles'] });
-      void navigate(`/articles/${article.id}`);
+    onSuccess: ({ id }) => {
+      void queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.listOptions().queryKey,
+      });
+
+      return navigate(`/articles/${id}`);
     },
   });
 

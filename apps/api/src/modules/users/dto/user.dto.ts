@@ -1,4 +1,5 @@
 import { IsEmail, IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { basename } from 'node:path';
 import { UserEntity } from '~/shared/user.entity';
 
 export class UserDto {
@@ -6,6 +7,9 @@ export class UserDto {
   @IsEmail()
   @IsNotEmpty()
   email: string;
+
+  @IsString()
+  icon: null | string;
 
   @IsNumber()
   id: number;
@@ -23,5 +27,6 @@ export class UserDto {
     this.name = data.name;
     this.email = data.email;
     this.role = data.role;
+    this.icon = data.icon ? `uploads/${basename(data.icon)}` : null;
   }
 }

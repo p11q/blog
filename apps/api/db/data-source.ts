@@ -1,16 +1,16 @@
 import { DataSource, DataSourceOptions } from 'typeorm';
 
 export const dataSourceOptions: DataSourceOptions = {
-  type: 'postgres',
-  host: process.env.DB_HOST || '127.0.0.1',
-  port: parseInt(process.env.DB_PORT ?? '', 10) || 5432,
-  username: process.env.DB_USERNAME || 'postgres',
-  password: process.env.DB_PASSWORD || 'secret_pass',
-  database: process.env.DB_DATABASE || 'nestjs_blog',
-  synchronize: false,
+  database: process.env.DB_DATABASE ?? 'nestjs_blog',
   entities: ['dist/**/*.entity.js'],
-  migrations: ['dist/db/migrations/*.js'],
+  host: process.env.DB_HOST ?? '127.0.0.1',
   logging: true,
+  migrations: ['dist/db/migrations/*.js'],
+  password: process.env.DB_PASSWORD ?? 'secret_pass',
+  port: parseInt(process.env.DB_PORT ?? '', 10) || 5432,
+  synchronize: false,
+  type: 'postgres',
+  username: process.env.DB_USERNAME ?? 'postgres',
 };
 
 const dataSource = new DataSource(dataSourceOptions);

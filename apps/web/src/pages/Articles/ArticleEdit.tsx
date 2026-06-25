@@ -27,9 +27,11 @@ export const ArticleEdit = (): React.JSX.Element => {
     mutationFn: (values: ArticleFormValues) =>
       apiUpdateArticle(articleId, values),
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['articles', articleId] });
-      void queryClient.invalidateQueries({ queryKey: ['articles'] });
-      void navigate(`/articles/${articleId}`);
+      void queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.listOptions().queryKey,
+      });
+
+      return navigate(`/articles/${articleId}`);
     },
   });
 

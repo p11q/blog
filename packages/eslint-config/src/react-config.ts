@@ -1,9 +1,9 @@
 import reactHooks from 'eslint-plugin-react-hooks';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, type Config } from 'eslint/config';
 import globals from 'globals';
-import { createConfig } from './config.mjs';
+import { createConfig } from './config';
 
-export function createReactConfig(tsconfigRootDir) {
+export function createReactConfig(tsconfigRootDir: string): Config[] {
   return defineConfig(
     createConfig(tsconfigRootDir),
 
@@ -21,11 +21,7 @@ export function createReactConfig(tsconfigRootDir) {
       rules: {
         '@typescript-eslint/no-misused-promises': [
           'error',
-          {
-            checksVoidReturn: {
-              attributes: false,
-            },
-          },
+          { checksVoidReturn: { attributes: false } },
         ],
         'perfectionist/sort-jsx-props': [
           'error',

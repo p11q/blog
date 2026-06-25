@@ -13,11 +13,24 @@ interface Props {
   articleId: number;
 }
 
-const Avatar = ({ name }: { name: string }): React.JSX.Element => (
-  <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
-    {getInitials(name)}
-  </div>
-);
+const Avatar = ({
+  name,
+  url,
+}: {
+  name: string;
+  url?: null | string;
+}): React.JSX.Element =>
+  url ? (
+    <img
+      className="size-9 shrink-0 rounded-full object-cover ring-1 ring-foreground/10"
+      alt={name}
+      src={url}
+    />
+  ) : (
+    <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-semibold text-primary">
+      {getInitials(name)}
+    </div>
+  );
 
 export const Comments = ({ articleId }: Props): React.JSX.Element => {
   const [text, setText] = useState('');
@@ -30,16 +43,14 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
   );
   const { data: profile } = useQuery(profileQueryFactory.profileOptions());
 
-  const invalidateComments = (): Promise<void> =>
-    queryClient.invalidateQueries({
-      queryKey: ['articles', articleId, 'comments'],
-    });
-
   const createMutation = useMutation({
     mutationFn: () => apiCreateComment(articleId, text.trim()),
     onSuccess: () => {
       setText('');
-      void invalidateComments();
+
+      return queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.commentsOptions(articleId).queryKey,
+      });
     },
   });
 
@@ -49,15 +60,19 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
     onSuccess: () => {
       setEditingId(null);
       setEditingText('');
-      void invalidateComments();
+
+      return queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.commentsOptions(articleId).queryKey,
+      });
     },
   });
 
   const deleteMutation = useMutation({
     mutationFn: (commentId: number) => apiDeleteComment(articleId, commentId),
-    onSuccess: () => {
-      void invalidateComments();
-    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.commentsOptions(articleId).queryKey,
+      }),
   });
 
   const startEdit = (commentId: number, currentText: string): void => {
@@ -70,7 +85,7 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
       <h2 className="text-lg font-semibold">Комментарии</h2>
 
       <div className="flex gap-3">
-        <Avatar name={profile?.name ?? '?'} />
+        <Avatar name={profile?.name ?? '?'} url={profile?.icon} />
         <div className="flex flex-1 flex-col gap-2">
           <Textarea
             className="rounded-2xl"
@@ -114,7 +129,7 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
 
           return (
             <li key={comment.id} className="flex gap-3">
-              <Avatar name={authorName} />
+              <Avatar name={authorName} url={comment.author?.url} />
 
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 {isEditing ? (

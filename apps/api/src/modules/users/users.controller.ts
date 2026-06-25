@@ -11,16 +11,18 @@ import {
   UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UserDto } from './dto/user.dto';
-import { AuthGuard } from '~/modules/guards/auth.guard';
-import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
-import type { AuthenticatedRequest } from '~/shared/types/jwt-payload';
-import { UpdateUserDto } from './dto/updateUser.dto';
-import { User } from '../libs/common/decorators/user.decorator';
-import { UserEntity } from '~/shared/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiOperation, ApiParam, ApiResponse } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { extname } from 'node:path';
+import { AuthGuard } from '~/modules/guards/auth.guard';
+import type { AuthenticatedRequest } from '~/shared/types/jwt-payload';
+import { UserEntity } from '~/shared/user.entity';
+import { User } from '../libs/common/decorators/user.decorator';
 import { UploadIconDto } from './dto/updateIcon.dto';
+import { UpdateUserDto } from './dto/updateUser.dto';
+import { UserDto } from './dto/user.dto';
+import { UsersService } from './users.service';
 
 @Controller('users')
 export class UsersController {
@@ -50,10 +52,6 @@ export class UsersController {
 
   @Post('update')
   @ApiOperation({ summary: 'Вывод обновленного профилья пользователя' })
-  @ApiParam({
-    description: 'Из UserGuards достает индификатор пользователя',
-    name: 'req',
-  })
   @ApiResponse({
     description: 'UpdateUserDto',
     example: 'name: string, email: string',
@@ -65,6 +63,7 @@ export class UsersController {
     @Body() data: UpdateUserDto,
   ): Promise<UserDto> {
     const user = await this.UserService.updateUser(author.id, data);
+
     if (!user) {
       throw new NotFoundException();
     }
@@ -74,16 +73,27 @@ export class UsersController {
 
   @Post('uploadIcon')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('icon'))
+  @UseInterceptors(
+    FileInterceptor('icon', {
+      storage: diskStorage({
+        destination: './db/uploads',
+        filename: (_req, file, cb) => {
+          const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+          cb(null, `${uniqueSuffix}${extname(file.originalname)}`);
+        },
+      }),
+    }),
+  )
   uploadIcon(
     @User('id') id_author: number,
     @UploadedFile(
       new ParseFilePipeBuilder()
         .addFileTypeValidator({
-          fileType: 'jpeg',
+          fileType: /(jpe?g|png|webp)$/,
+          skipMagicNumbersValidation: true,
         })
         .addMaxSizeValidator({
-          maxSize: 1000,
+          maxSize: 1024 * 1024 * 5,
         })
         .build({
           errorHttpStatusCode: HttpStatus.UNPROCESSABLE_ENTITY,

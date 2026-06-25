@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { basename } from 'node:path';
 import { Repository } from 'typeorm';
 import { ArticleEntity } from '~/shared/article.entity';
 import { EUserRole, UserEntity } from '~/shared/user.entity';
@@ -13,7 +14,7 @@ import { CommentDto } from './dto/comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
 
 export interface CommentListItem {
-  author: null | { id: number; name: string };
+  author: null | { id: number; name: string; url: null | string };
   createAt: Date;
   id: number;
   text: string;
@@ -50,7 +51,7 @@ export class CommentsService {
 
     const comment = new CommentEntity();
     comment.text = data.text;
-    comment.author = user.id;
+    comment.authorId = user.id;
     comment.article = article.id;
 
     const res = await comment.save();
@@ -97,10 +98,16 @@ export class CommentsService {
       .getMany();
 
     return comments.map((comment) => {
-      const author = comment.author as unknown as null | UserEntity;
+      const author = comment.author;
 
       return {
-        author: author ? { id: author.id, name: author.name } : null,
+        author: author
+          ? {
+              id: author.id,
+              name: author.name,
+              url: author.icon ? `uploads/${basename(author.icon)}` : null,
+            }
+          : null,
         createAt: comment.createAt,
         id: comment.id,
         text: comment.text,
@@ -128,7 +135,7 @@ export class CommentsService {
     const comment = await this.commentRepo.findOne({
       where: {
         article: id_article,
-        author: id_author,
+        authorId: id_author,
         id: id_comment,
       },
     });

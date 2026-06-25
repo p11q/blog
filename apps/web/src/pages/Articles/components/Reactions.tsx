@@ -16,22 +16,19 @@ export const Reactions = ({ articleId }: Props): React.JSX.Element => {
     articlesQueryFactory.dislikesOptions(articleId),
   );
 
-  const refreshReactions = (): void => {
-    void queryClient.invalidateQueries({
-      queryKey: ['articles', articleId, 'likes'],
-    });
-    void queryClient.invalidateQueries({
-      queryKey: ['articles', articleId, 'dislikes'],
-    });
-  };
-
   const likeMutation = useMutation({
     mutationFn: () => apiToggleLike(articleId),
-    onSuccess: refreshReactions,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.detailOptions(articleId).queryKey,
+      }),
   });
   const dislikeMutation = useMutation({
     mutationFn: () => apiToggleDislike(articleId),
-    onSuccess: refreshReactions,
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.detailOptions(articleId).queryKey,
+      }),
   });
 
   return (

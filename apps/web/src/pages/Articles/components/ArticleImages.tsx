@@ -22,11 +22,10 @@ export const ArticleImages = ({
 
   const uploadMutation = useMutation({
     mutationFn: (file: File) => apiUploadImage(articleId, file),
-    onSuccess: () => {
-      void queryClient.invalidateQueries({
-        queryKey: ['articles', articleId, 'images'],
-      });
-    },
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: articlesQueryFactory.imagesOptions(articleId).queryKey,
+      }),
   });
 
   const handleSelectFile = (

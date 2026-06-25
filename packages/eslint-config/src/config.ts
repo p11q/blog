@@ -2,10 +2,10 @@ import eslint from '@eslint/js';
 import stylistic from '@stylistic/eslint-plugin';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import perfectionist from 'eslint-plugin-perfectionist';
-import { defineConfig } from 'eslint/config';
+import { defineConfig, type Config } from 'eslint/config';
 import tseslint from 'typescript-eslint';
 
-export function createConfig(tsconfigRootDir) {
+export function createConfig(tsconfigRootDir: string): Config[] {
   return defineConfig(
     {
       languageOptions: {

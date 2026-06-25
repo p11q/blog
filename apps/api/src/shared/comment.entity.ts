@@ -23,12 +23,19 @@ export class CommentEntity extends BaseEntity {
   article: number;
 
   @ApiProperty({
-    description: 'Индификатор авторая, который оставил комментарий',
+    description: 'Автор, который оставил комментарий',
     type: () => UserEntity,
   })
   @ManyToOne(() => UserEntity, (item) => item.comments)
   @JoinColumn({ name: 'user_id' })
-  author: number;
+  author: null | UserEntity;
+
+  @ApiProperty({
+    description: 'Индификатор автора, который оставил комментарий',
+    type: () => Number,
+  })
+  @Column({ name: 'user_id' })
+  authorId: number;
 
   @ApiProperty({
     description: 'Дата создания комментария',
