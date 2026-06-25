@@ -5,6 +5,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import { type ArticleDTO } from '../api';
 
 const formSchema = z.object({
   description: z.string().min(1, 'Обязательное поле'),
@@ -13,13 +14,11 @@ const formSchema = z.object({
   title: z.string().min(1, 'Обязательное поле'),
 });
 
-export type ArticleFormValues = z.infer<typeof formSchema>;
-
 interface Props {
-  defaultValues?: ArticleFormValues;
+  defaultValues?: ArticleDTO;
   error?: Error | null;
   isPending?: boolean;
-  onSubmit: (values: ArticleFormValues) => void;
+  onSubmit: (values: ArticleDTO) => void;
   submitLabel: string;
 }
 

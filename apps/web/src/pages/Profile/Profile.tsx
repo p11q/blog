@@ -6,9 +6,9 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiUpdateProfile, queryFactory } from './api';
+import { apiUpdateProfile, queryFactory, type UpdateProfileDTO } from './api';
 import { AvatarUpload } from './components/AvatarUpload';
-import { ProfileForm, type ProfileFormValues } from './components/ProfileForm';
+import { ProfileForm } from './components/ProfileForm';
 
 export const Profile = (): React.JSX.Element => {
   const queryClient = useQueryClient();
@@ -20,7 +20,7 @@ export const Profile = (): React.JSX.Element => {
   } = useQuery(queryFactory.profileOptions());
 
   const updateMutation = useMutation({
-    mutationFn: (values: ProfileFormValues) => apiUpdateProfile(values),
+    mutationFn: (values: UpdateProfileDTO) => apiUpdateProfile(values),
     onSuccess: () =>
       queryClient.invalidateQueries({
         queryKey: queryFactory.profileOptions().queryKey,
@@ -40,8 +40,8 @@ export const Profile = (): React.JSX.Element => {
   }
 
   return (
-    <div className="flex w-full max-w-md flex-col gap-6">
-      <Card>
+    <div className="flex w-full gap-6">
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Аватар</CardTitle>
           <CardDescription>Фотография вашего профиля</CardDescription>
@@ -51,7 +51,7 @@ export const Profile = (): React.JSX.Element => {
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="w-full">
         <CardHeader>
           <CardTitle>Профиль</CardTitle>
           <CardDescription>Информация о вашем аккаунте</CardDescription>
@@ -61,7 +61,6 @@ export const Profile = (): React.JSX.Element => {
             defaultValues={{ email: profile.email, name: profile.name }}
             error={updateMutation.error}
             isPending={updateMutation.isPending}
-            submitLabel="Сохранить"
             onSubmit={updateMutation.mutate}
           />
         </CardContent>

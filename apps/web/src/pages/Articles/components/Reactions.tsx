@@ -9,12 +9,8 @@ interface Props {
 
 export const Reactions = ({ articleId }: Props): React.JSX.Element => {
   const queryClient = useQueryClient();
-  const { data: likes } = useQuery(
-    articlesQueryFactory.likesOptions(articleId),
-  );
-  const { data: dislikes } = useQuery(
-    articlesQueryFactory.dislikesOptions(articleId),
-  );
+  const likes = useQuery(articlesQueryFactory.likesOptions(articleId));
+  const dislikes = useQuery(articlesQueryFactory.dislikesOptions(articleId));
 
   const likeMutation = useMutation({
     mutationFn: () => apiToggleLike(articleId),
@@ -41,7 +37,7 @@ export const Reactions = ({ articleId }: Props): React.JSX.Element => {
           likeMutation.mutate();
         }}
       >
-        Нравится · {likes ?? 0}
+        Нравится · {likes.data ?? 0}
       </Button>
       <Button
         disabled={dislikeMutation.isPending}
@@ -51,7 +47,7 @@ export const Reactions = ({ articleId }: Props): React.JSX.Element => {
           dislikeMutation.mutate();
         }}
       >
-        Не нравится · {dislikes ?? 0}
+        Не нравится · {dislikes.data ?? 0}
       </Button>
     </div>
   );

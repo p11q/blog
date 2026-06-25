@@ -15,7 +15,7 @@ export const profileSchema = z.object({
   role: z.string(),
 });
 
-export type Profile = z.infer<typeof profileSchema>;
+export type ProfileResponse = z.infer<typeof profileSchema>;
 
 export const apiGetProfile = (): Promise<z.infer<typeof profileSchema>> =>
   fetchWithZod(profileSchema, {

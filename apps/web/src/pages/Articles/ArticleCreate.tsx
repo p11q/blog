@@ -7,16 +7,16 @@ import {
 } from '@/components/ui/card';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { apiCreateArticle } from './api/apiCreateArticle';
+import { apiCreateArticle, type ArticleDTO } from './api/apiCreateArticle';
 import { articlesQueryFactory } from './api/queryFactory';
-import { ArticleForm, type ArticleFormValues } from './components/ArticleForm';
+import { ArticleForm } from './components/ArticleForm';
 
 export const ArticleCreate = (): React.JSX.Element => {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const { error, isPending, mutate } = useMutation({
-    mutationFn: (values: ArticleFormValues) => apiCreateArticle(values),
+    mutationFn: (values: ArticleDTO) => apiCreateArticle(values),
     onSuccess: ({ id }) => {
       void queryClient.invalidateQueries({
         queryKey: articlesQueryFactory.listOptions().queryKey,

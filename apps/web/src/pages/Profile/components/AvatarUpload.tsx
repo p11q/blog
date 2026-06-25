@@ -9,9 +9,6 @@ interface Props {
   name: string;
 }
 
-const getInitials = (name: string): string =>
-  name.trim().slice(0, 1).toUpperCase() || '?';
-
 export const AvatarUpload = ({ icon, name }: Props): React.JSX.Element => {
   const inputRef = useRef<HTMLInputElement>(null);
   const queryClient = useQueryClient();
@@ -46,7 +43,7 @@ export const AvatarUpload = ({ icon, name }: Props): React.JSX.Element => {
         />
       ) : (
         <div className="flex h-20 w-20 items-center justify-center rounded-full bg-secondary text-2xl font-medium text-secondary-foreground ring-1 ring-foreground/10">
-          {getInitials(name)}
+          {name.trim().slice(0, 1).toUpperCase() || '?'}
         </div>
       )}
 

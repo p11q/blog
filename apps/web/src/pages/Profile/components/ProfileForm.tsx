@@ -4,20 +4,18 @@ import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
+import type { UpdateProfileDTO } from '../api';
 
 const formSchema = z.object({
   email: z.email('Некорректный email'),
   name: z.string().min(1, 'Обязательное поле'),
 });
 
-export type ProfileFormValues = z.infer<typeof formSchema>;
-
 interface Props {
-  defaultValues: ProfileFormValues;
+  defaultValues: UpdateProfileDTO;
   error?: Error | null;
   isPending?: boolean;
-  onSubmit: (values: ProfileFormValues) => void;
-  submitLabel: string;
+  onSubmit: (values: UpdateProfileDTO) => void;
 }
 
 export const ProfileForm = ({
@@ -25,12 +23,11 @@ export const ProfileForm = ({
   error,
   isPending,
   onSubmit,
-  submitLabel,
 }: Props): React.JSX.Element => {
   const form = useForm({
-    defaultValues,
     mode: 'onChange',
     resolver: zodResolver(formSchema),
+    values: defaultValues,
   });
 
   return (
@@ -75,8 +72,13 @@ export const ProfileForm = ({
 
       {error && <FieldError errors={[error]} />}
 
-      <Button disabled={!!isPending || !form.formState.isDirty} type="submit">
-        {submitLabel}
+      <Button
+        disabled={
+          !!isPending || !form.formState.isDirty || !form.formState.isValid
+        }
+        type="submit"
+      >
+        Сохранить
       </Button>
     </form>
   );

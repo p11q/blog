@@ -8,12 +8,8 @@ import { ArticleCard } from './components/ArticleCard';
 
 export const ArticlesList = (): React.JSX.Element => {
   const queryClient = useQueryClient();
-  const {
-    data: articles,
-    error,
-    isLoading,
-  } = useQuery(articlesQueryFactory.listOptions());
-  const { data: profile } = useQuery(profileQueryFactory.profileOptions());
+  const articles = useQuery(articlesQueryFactory.listOptions());
+  const profile = useQuery(profileQueryFactory.profileOptions());
 
   const deleteMutation = useMutation({
     mutationFn: (articleId: number) => apiDeleteArticle(articleId),
@@ -32,28 +28,28 @@ export const ArticlesList = (): React.JSX.Element => {
         </Button>
       </div>
 
-      {isLoading && (
+      {articles.isLoading && (
         <p className="text-sm text-muted-foreground">Загрузка статей...</p>
       )}
 
-      {error && (
+      {articles.error && (
         <p className="text-sm text-destructive">
-          Не удалось загрузить статьи: {error.message}
+          Не удалось загрузить статьи: {articles.error.message}
         </p>
       )}
 
-      {!isLoading && articles?.length === 0 && (
+      {!articles.isLoading && articles.data?.length === 0 && (
         <p className="text-sm text-muted-foreground">
           Статей пока нет. Создайте первую!
         </p>
       )}
 
       <div className="grid gap-4 sm:grid-cols-2">
-        {articles?.map((article) => (
+        {articles.data?.map((article) => (
           <ArticleCard
             key={article.id}
             article={article}
-            canDelete={!!profile && article.author?.id === profile.id}
+            canDelete={!!profile.data && article.author?.id === profile.data.id}
             isDeleting={
               deleteMutation.isPending &&
               deleteMutation.variables === article.id

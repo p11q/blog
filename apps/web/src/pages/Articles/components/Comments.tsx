@@ -38,10 +38,8 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
   const [editingText, setEditingText] = useState('');
   const queryClient = useQueryClient();
 
-  const { data: comments, isLoading } = useQuery(
-    articlesQueryFactory.commentsOptions(articleId),
-  );
-  const { data: profile } = useQuery(profileQueryFactory.profileOptions());
+  const comments = useQuery(articlesQueryFactory.commentsOptions(articleId));
+  const profile = useQuery(profileQueryFactory.profileOptions());
 
   const createMutation = useMutation({
     mutationFn: () => apiCreateComment(articleId, text.trim()),
@@ -85,7 +83,7 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
       <h2 className="text-lg font-semibold">Комментарии</h2>
 
       <div className="flex gap-3">
-        <Avatar name={profile?.name ?? '?'} url={profile?.icon} />
+        <Avatar name={profile.data?.name ?? '?'} url={profile.data?.icon} />
         <div className="flex flex-1 flex-col gap-2">
           <Textarea
             className="rounded-2xl"
@@ -108,22 +106,23 @@ export const Comments = ({ articleId }: Props): React.JSX.Element => {
         </div>
       </div>
 
-      {isLoading && (
+      {comments.isLoading && (
         <p className="text-sm text-muted-foreground">
           Загрузка комментариев...
         </p>
       )}
 
-      {!isLoading && comments?.length === 0 && (
+      {!comments.isLoading && comments.data?.length === 0 && (
         <p className="text-sm text-muted-foreground">
           Пока нет комментариев. Будьте первым!
         </p>
       )}
 
       <ul className="flex flex-col gap-4">
-        {comments?.map((comment) => {
+        {comments.data?.map((comment) => {
           const authorName = comment.author?.name ?? 'Аноним';
-          const isOwn = !!profile && comment.author?.id === profile.id;
+          const isOwn =
+            !!profile.data && comment.author?.id === profile.data.id;
           const isEdited = comment.updateAt !== comment.createAt;
           const isEditing = editingId === comment.id;
 

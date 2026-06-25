@@ -8,9 +8,10 @@ import {
 import { queryFactory as profileQueryFactory } from '@/pages/Profile/api';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import { type ArticleDTO } from './api/apiCreateArticle';
 import { apiUpdateArticle } from './api/apiUpdateArticle';
 import { articlesQueryFactory } from './api/queryFactory';
-import { ArticleForm, type ArticleFormValues } from './components/ArticleForm';
+import { ArticleForm } from './components/ArticleForm';
 
 export const ArticleEdit = (): React.JSX.Element => {
   const { id } = useParams();
@@ -18,14 +19,11 @@ export const ArticleEdit = (): React.JSX.Element => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { data: article, isLoading } = useQuery(
-    articlesQueryFactory.detailOptions(articleId),
-  );
-  const { data: profile } = useQuery(profileQueryFactory.profileOptions());
+  const article = useQuery(articlesQueryFactory.detailOptions(articleId));
+  const profile = useQuery(profileQueryFactory.profileOptions());
 
   const { error, isPending, mutate } = useMutation({
-    mutationFn: (values: ArticleFormValues) =>
-      apiUpdateArticle(articleId, values),
+    mutationFn: (values: ArticleDTO) => apiUpdateArticle(articleId, values),
     onSuccess: () => {
       void queryClient.invalidateQueries({
         queryKey: articlesQueryFactory.listOptions().queryKey,
@@ -35,11 +33,11 @@ export const ArticleEdit = (): React.JSX.Element => {
     },
   });
 
-  if (isLoading || !article || !profile) {
+  if (article.isLoading || !article.data || !profile.data) {
     return <p className="text-sm text-muted-foreground">Загрузка...</p>;
   }
 
-  if (article.author?.id !== profile.id) {
+  if (article.data.author?.id !== profile.data.id) {
     return <Navigate to={`/articles/${articleId}`} replace />;
   }
 
@@ -52,10 +50,10 @@ export const ArticleEdit = (): React.JSX.Element => {
       <CardContent>
         <ArticleForm
           defaultValues={{
-            description: article.description ?? '',
-            tags: article.tags ?? '',
-            text: article.text,
-            title: article.title,
+            description: article.data.description ?? '',
+            tags: article.data.tags ?? '',
+            text: article.data.text,
+            title: article.data.title,
           }}
           error={error}
           isPending={isPending}

@@ -17,12 +17,8 @@ export const ArticleDetail = (): React.JSX.Element => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const {
-    data: article,
-    error,
-    isLoading,
-  } = useQuery(articlesQueryFactory.detailOptions(articleId));
-  const { data: profile } = useQuery(profileQueryFactory.profileOptions());
+  const article = useQuery(articlesQueryFactory.detailOptions(articleId));
+  const profile = useQuery(profileQueryFactory.profileOptions());
 
   const deleteMutation = useMutation({
     mutationFn: () => apiDeleteArticle(articleId),
@@ -35,21 +31,23 @@ export const ArticleDetail = (): React.JSX.Element => {
     },
   });
 
-  if (isLoading) {
+  if (article.isLoading) {
     return <p className="text-sm text-muted-foreground">Загрузка статьи...</p>;
   }
 
-  if (error || !article) {
+  if (article.error || !article.data) {
     return (
       <p className="text-sm text-destructive">
-        Не удалось загрузить статью{error ? `: ${error.message}` : ''}
+        Не удалось загрузить статью
+        {article.error ? `: ${article.error.message}` : ''}
       </p>
     );
   }
 
-  const authorName = article.author?.name ?? null;
+  const authorName = article.data.author?.name ?? null;
 
-  const isAuthor = !!profile && article.author?.id === profile.id;
+  const isAuthor =
+    !!profile.data && article.data.author?.id === profile.data.id;
 
   return (
     <article className="flex flex-col gap-6">
@@ -59,11 +57,13 @@ export const ArticleDetail = (): React.JSX.Element => {
 
       <header className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-4">
-          <h1 className="text-3xl font-semibold">{article.title}</h1>
+          <h1 className="text-3xl font-semibold">{article.data.title}</h1>
           {isAuthor && (
             <div className="flex shrink-0 gap-2">
               <Button size="sm" variant="outline" asChild>
-                <Link to={`/articles/${article.id}/edit`}>Редактировать</Link>
+                <Link to={`/articles/${article.data.id}/edit`}>
+                  Редактировать
+                </Link>
               </Button>
               <Button
                 disabled={deleteMutation.isPending}
@@ -81,13 +81,15 @@ export const ArticleDetail = (): React.JSX.Element => {
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           {authorName && <span>Автор: {authorName}</span>}
-          <span>{formatDate(article.createAt)}</span>
-          {article.tags && <Badge variant="secondary">{article.tags}</Badge>}
+          <span>{formatDate(article.data.createAt)}</span>
+          {article.data.tags && (
+            <Badge variant="secondary">{article.data.tags}</Badge>
+          )}
         </div>
       </header>
 
       <p className="text-base whitespace-pre-line text-foreground">
-        {article.text}
+        {article.data.text}
       </p>
 
       <ArticleImages articleId={articleId} canUpload={isAuthor} />
